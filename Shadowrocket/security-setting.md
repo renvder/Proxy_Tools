@@ -4,7 +4,7 @@ This guide explains how to enable STUN protection, improve compatibility for cer
 
 ---
 
-## 1. Enable STUN Protection
+## 1. Enable STUN Protection 
 
 > This setting helps reduce the risk of WebRTC using STUN servers to discover your real public IP address.
 
