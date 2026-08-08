@@ -27,8 +27,8 @@ Chromium - < [EN](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-
 
 <br>
 
-Brave - < [EN](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/Brave_Browser.md) > < [正體](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/Brave_Browser_tw.md) >  
-LibreWolf - < [EN](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/LibreWolf_Browser.md) > < [正體](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/LibreWolf_Browser_tw.md) >  
+Brave - < [EN](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/Brave_Browser.md) > < [正體](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/Brave_Browser_tw.md) > [Download](https://brave.com/download/)  
+LibreWolf - < [EN](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/LibreWolf_Browser.md) > < [正體](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/LibreWolf_Browser_tw.md) > [Download](https://librewolf.net/installation/)
 
 ---  
   
