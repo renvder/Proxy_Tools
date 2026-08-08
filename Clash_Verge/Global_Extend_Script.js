@@ -1,4 +1,4 @@
-// 國內 DNS 伺服器 
+// 國內 DNS 伺服器
 const domesticNameservers = [
   "https://2ms.dns.aliyun.com/dns-query", // 阿里 DoH
   "https://doh.pub/dns-query" // 騰訊 DoH
