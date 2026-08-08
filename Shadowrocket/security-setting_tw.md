@@ -1,4 +1,4 @@
-# Shadowrocket 隱私與網路相容性設定指南
+# Shadowrocket 隱私與網路相容性設定指南 
 
 本指南說明如何在 Shadowrocket 中啟用 STUN 防護、改善部分 App 的網路相容性，以及使用 TUN 模式接管裝置流量。
 
