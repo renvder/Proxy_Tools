@@ -1,4 +1,4 @@
-dns:
+dns: 
   enable: true
   listen: ':53'
   enhanced-mode: 'fake-ip'
