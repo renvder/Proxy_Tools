@@ -17,7 +17,7 @@ This can bypass local proxy-based DNS handling. If DNS requests use a direct con
 #### Steps
 
 1. Open Chrome.
-2. Click the menu in the upper-right corner and open **Settings**.
+2. Click the menu in the upper-right corner and open **Settings**. 
 3. Search for:
 
    ```text
