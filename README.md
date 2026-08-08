@@ -22,13 +22,13 @@ Chromium - < [Setting](https://github.com/renvder/Proxy_Tools/blob/main/Browser_
 
 ---  
 
-## Browser Anti-Tracking :
-#### 🕵️ 瀏覽器隱私與反追蹤
+## Anti-Tracking :
+#### 🕵️ 隱私與反追蹤
 
 <br>
 
-Brave - < [Setting](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/Brave_Browser.md) > < [設定](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/Brave_Browser_tw.md) > [Download](https://brave.com/download/)  
-LibreWolf - < [Setting](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/LibreWolf_Browser.md) > < [設定](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/LibreWolf_Browser_tw.md) > [Download](https://librewolf.net/installation/)
+Brave Browser - < [Setting](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/Brave_Browser.md) > < [設定](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/Brave_Browser_tw.md) > [Download](https://brave.com/download/)  
+LibreWolf Browser - < [Setting](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/LibreWolf_Browser.md) > < [設定](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/LibreWolf_Browser_tw.md) > [Download](https://librewolf.net/installation/)
 
 ---  
   
