@@ -3,7 +3,6 @@
 
 <br>
 
-Karing - [Download](https://github.com/KaringX/karing)  
 v2rayN - [Download](https://github.com/2dust/v2rayN)  
 v2rayNG - [Download](https://github.com/2dust/v2rayNG)   
 Clash Verge - [Download](https://github.com/clash-verge-rev/clash-verge-rev)  
