@@ -6,7 +6,6 @@ const domesticNameservers = [
 // 國外 DNS 伺服器
 const foreignNameservers = [
   "https://208.67.222.222/dns-query", // OpenDNS
-  "https://77.88.8.8/dns-query", // YandexDNS
   "https://1.1.1.1/dns-query", // CloudflareDNS
   "https://8.8.4.4/dns-query", // GoogleDNS
 ];
@@ -296,7 +295,7 @@ function main(config) {
       ...groupBaseOption,
       "name": "魔獸世界",
       "type": "select",
-      "proxies": ["全局直連", "節點選擇"],
+      "proxies": ["節點選擇", "全局直連"],
       "include-all": true,
       "filter": "^(?!.*(官网|套餐|流量|异常|剩余)).*$",
       "icon": "https://upload.wikimedia.org/wikipedia/commons/e/eb/WoW_icon.svg"
