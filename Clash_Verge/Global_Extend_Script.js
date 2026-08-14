@@ -187,6 +187,12 @@ const ruleProviders = {
     "behavior": "classical",
     "url": "https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Microsoft/Microsoft.yaml",
     "path": "./ruleset/blackmatrix7/microsoft.yaml"
+  },
+  "Blizzard": {
+    ...ruleProviderCommon,
+    "behavior": "classical",
+    "url": "https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Blizzard/Blizzard.yaml",
+    "path": "./ruleset/blackmatrix7/blizzard.yaml"
   }
 };
 // 規則
@@ -199,6 +205,10 @@ const rules = [
   "PROCESS-NAME,steamwebhelper.exe,Steam遊戲",
   "PROCESS-NAME,cs2.exe,Steam遊戲",
   "PROCESS-NAME,dota2.exe,Steam遊戲",
+  "PROCESS-NAME,Wow.exe,魔獸世界",
+  "PROCESS-NAME,WowClassic.exe,魔獸世界",
+  "PROCESS-NAME,WowClassicT.exe,魔獸世界",
+  "PROCESS-NAME,WowT.exe,魔獸世界",
 
   // 自定義規則
   "DOMAIN-SUFFIX,googleapis.cn,節點選擇",
@@ -209,6 +219,9 @@ const rules = [
 
   // Steam 域名及 IP 補充規則
   "RULE-SET,Steam,Steam遊戲",
+
+  // 暴雪/魔獸世界域名補充規則
+  "RULE-SET,Blizzard,魔獸世界",
 
   // Loyalsoldier 規則集
   "RULE-SET,applications,全局直連",
@@ -278,6 +291,15 @@ function main(config) {
       "include-all": true,
       "filter": "^(?!.*(官网|套餐|流量|异常|剩余)).*$",
       "icon": "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/steam.svg"
+    },
+    {
+      ...groupBaseOption,
+      "name": "魔獸世界",
+      "type": "select",
+      "proxies": ["全局直連", "節點選擇"],
+      "include-all": true,
+      "filter": "^(?!.*(官网|套餐|流量|异常|剩余)).*$",
+      "icon": "https://upload.wikimedia.org/wikipedia/commons/e/eb/WoW_icon.svg"
     },
     {
       ...groupBaseOption,
