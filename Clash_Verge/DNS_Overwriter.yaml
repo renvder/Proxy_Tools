@@ -1,49 +1,46 @@
 dns:
   enable: true
-  listen: '0.0.0.0:1053'
-  ipv6: false
-  prefer-h3: false
-  respect-rules: true
-  use-system-hosts: false
-  cache-algorithm: 'arc'
+  listen: ':53'
   enhanced-mode: 'fake-ip'
   fake-ip-range: '198.18.0.1/16'
+  fake-ip-range6: 'fdfe:dcba:9876::1/64'
   fake-ip-filter-mode: 'blacklist'
+  prefer-h3: false
+  respect-rules: true
+  use-hosts: false
+  use-system-hosts: false
+  ipv6: false
   fake-ip-filter:
-    - '+.lan'
-    - '+.local'
-    - '+.msftconnecttest.com'
-    - '+.msftncsi.com'
-    - '+.google.com'
-    - '+.gstatic.com'
-    - '+.googleapis.com'
-    - '+.googleusercontent.com'
-    - '+.googlevideo.com'
-    - '+.ggpht.com'
-    - '+.youtube.com'
-    - '+.ytimg.com'
-    - '+.gemini.google.com'
-    - 'localhost.ptlogin2.qq.com'
-    - 'localhost.sec.qq.com'
-    - 'localhost.work.weixin.qq.com'
-    - '+.in-addr.arpa'
-    - '+.ip6.arpa'
+    - '*.lan'
+    - '*.local'
+    - '*.arpa'
     - 'time.*.com'
-    - 'time.*.gov'
-    - 'pool.ntp.org'
+    - 'ntp.*.com'
+    - '+.market.xiaomi.com'
+    - 'localhost.ptlogin2.qq.com'
+    - '*.msftncsi.com'
+    - 'www.msftconnecttest.com'
   default-nameserver:
     - '223.5.5.5'
-    - '8.8.8.8'
+    - '223.6.6.6'
   nameserver:
-    - 'https://208.67.222.222/dns-query#節點選擇'
-    - 'https://1.1.1.1/dns-query#節點選擇'
-    - 'https://8.8.4.4/dns-query#節點選擇'
-  proxy-server-nameserver:
-    - 'https://2ms.dns.aliyun.com/dns-query'
     - 'https://doh.pub/dns-query'
+    - 'https://dns.alidns.com/dns-query'
+  direct-nameserver-follow-policy: false
+  fallback-filter:
+    geoip: true
+    geoip-code: 'CN'
+    ipcidr:
+      - '240.0.0.0/4'
+      - '0.0.0.0/32'
+    domain:
+      - '+.google.com'
+      - '+.facebook.com'
+      - '+.youtube.com'
+  fallback:
+    - 'https://1.1.1.1/dns-query'
+    - 'https://8.8.8.8/dns-query'
+  proxy-server-nameserver:
+    - 'https://doh.pub/dns-query'
+    - 'https://dns.alidns.com/dns-query'
   direct-nameserver: []
-  direct-nameserver-follow-policy: true
-  nameserver-policy:
-    'geosite:private,cn':
-      - 'https://2ms.dns.aliyun.com/dns-query'
-      - 'https://doh.pub/dns-query'
