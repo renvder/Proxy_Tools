@@ -1,59 +1,66 @@
-// 國內 DNS 伺服器
 const domesticNameservers = [
-  "https://2ms.dns.aliyun.com/dns-query", // 阿里 DoH
-  "https://doh.pub/dns-query" // 騰訊 DoH
+  "https://223.5.5.5/dns-query",
+  "https://120.53.53.53/dns-query",
+  "https://doh.pub/dns-query"
 ];
-// 國外 DNS 伺服器
+
 const foreignNameservers = [
-  "https://208.67.222.222/dns-query", // OpenDNS
-  "https://1.1.1.1/dns-query", // CloudflareDNS
-  "https://8.8.4.4/dns-query", // GoogleDNS
+  "https://1.1.1.1/dns-query#節點選擇",
+  "https://8.8.8.8/dns-query#節點選擇",
+  "https://208.67.222.222/dns-query#節點選擇"
 ];
-// DNS 配置
+
 const dnsConfig = {
   "enable": true,
   "listen": "0.0.0.0:1053",
   "ipv6": false,
-  "prefer-h3": false,
+  "prefer-h3": true,
   "respect-rules": true,
   "use-system-hosts": false,
+  "use-hosts": true,
   "cache-algorithm": "arc",
   "enhanced-mode": "fake-ip",
   "fake-ip-range": "198.18.0.1/16",
+  "fake-ip-filter-mode": "blacklist",
   "fake-ip-filter": [
-    // 本地主機/設備
     "+.lan",
     "+.local",
-    // Windows 網路出現小地球圖示
+    "+.arpa",
+    "localhost",
     "+.msftconnecttest.com",
     "+.msftncsi.com",
-    // QQ 快速登錄檢測失敗
+    "www.msftconnecttest.com",
     "localhost.ptlogin2.qq.com",
     "localhost.sec.qq.com",
-    // 補充條目
-    "+.in-addr.arpa",
-    "+.ip6.arpa",
+    "localhost.work.weixin.qq.com",
     "time.*.com",
     "time.*.gov",
+    "ntp.*.com",
     "pool.ntp.org",
-    // 微訊快速登錄檢測失敗
-    "localhost.work.weixin.qq.com"
+    "+.market.xiaomi.com",
+    "internal.corp"
   ],
-  "default-nameserver": ["223.5.5.5", "8.8.8.8"],
+  "default-nameserver": [
+    "223.5.5.5",
+    "120.53.53.53",
+    "8.8.8.8"
+  ],
   "nameserver": [...foreignNameservers],
   "proxy-server-nameserver": [...domesticNameservers],
   "direct-nameserver": [...domesticNameservers],
+  "direct-nameserver-follow-policy": false,
   "nameserver-policy": {
-    "geosite:private,cn": domesticNameservers
+    "geosite:private,cn": [...domesticNameservers],
+    "geosite:geolocation-!cn": [...foreignNameservers]
   }
 };
-// 規則集通用配置
+
 const ruleProviderCommon = {
   "type": "http",
   "format": "yaml",
   "interval": 86400
 };
-// 規則集配置
+
 const ruleProviders = {
   "reject": {
     ...ruleProviderCommon,
@@ -194,12 +201,9 @@ const ruleProviders = {
     "path": "./ruleset/blackmatrix7/blizzard.yaml"
   }
 };
-// 規則
-const rules = [
-  // --- Adobe 攔截規則 ---
-  "DOMAIN-KEYWORD,adobe,REJECT",
 
-  // --- 遊戲進程暴力攔截規則 (Tun 模式最有效) ---
+const rules = [
+  "DOMAIN-KEYWORD,adobe,REJECT",
   "PROCESS-NAME,steam.exe,Steam遊戲",
   "PROCESS-NAME,steamwebhelper.exe,Steam遊戲",
   "PROCESS-NAME,cs2.exe,Steam遊戲",
@@ -208,21 +212,13 @@ const rules = [
   "PROCESS-NAME,WowClassic.exe,魔獸世界",
   "PROCESS-NAME,WowClassicT.exe,魔獸世界",
   "PROCESS-NAME,WowT.exe,魔獸世界",
-
-  // 自定義規則
   "DOMAIN-SUFFIX,googleapis.cn,節點選擇",
   "DOMAIN-SUFFIX,gstatic.com,節點選擇",
   "DOMAIN-SUFFIX,xn--ngstr-lra8j.com,節點選擇",
   "DOMAIN-SUFFIX,github.io,節點選擇",
   "DOMAIN,v2rayse.com,節點選擇",
-
-  // Steam 域名及 IP 補充規則
   "RULE-SET,Steam,Steam遊戲",
-
-  // 暴雪/魔獸世界域名補充規則
   "RULE-SET,Blizzard,魔獸世界",
-
-  // Loyalsoldier 規則集
   "RULE-SET,applications,全局直連",
   "RULE-SET,private,全局直連",
   "RULE-SET,reject,廣告過濾",
@@ -244,14 +240,12 @@ const rules = [
   "RULE-SET,lancidr,全局直連,no-resolve",
   "RULE-SET,cncidr,全局直連,no-resolve",
   "RULE-SET,telegramcidr,電報消息,no-resolve",
-
-  // 其他規則
   "GEOSITE,CN,全局直連",
   "GEOIP,LAN,全局直連,no-resolve",
   "GEOIP,CN,全局直連,no-resolve",
   "MATCH,漏網之魚"
 ];
-// 代理組通用配置
+
 const groupBaseOption = {
   "interval": 300,
   "timeout": 3000,
@@ -260,7 +254,7 @@ const groupBaseOption = {
   "max-failed-times": 3,
   "hidden": false
 };
-// 程序入口
+
 function main(config) {
   const proxyCount = config?.proxies?.length ?? 0;
   const proxyProviderCount =
@@ -269,10 +263,8 @@ function main(config) {
     throw new Error("配置文件中未找到任何代理");
   }
 
-  // 覆蓋原配置中的 DNS 配置
   config["dns"] = dnsConfig;
 
-  // 覆蓋原配置中的代理組
   config["proxy-groups"] = [
     {
       ...groupBaseOption,
@@ -416,17 +408,14 @@ function main(config) {
     }
   ];
 
-  // 覆蓋原配置中的規則集與規則
   config["rule-providers"] = ruleProviders;
   config["rules"] = rules;
 
-  // 檢查並為每個節點設置 udp = true
   if (config["proxies"]) {
     config["proxies"].forEach(proxy => {
       proxy.udp = true;
     });
   }
 
-  // 返回修改後的配置
   return config;
 }
