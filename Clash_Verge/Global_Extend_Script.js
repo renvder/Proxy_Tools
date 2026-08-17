@@ -14,7 +14,7 @@ const dnsConfig = {
   "enable": true,
   "listen": "0.0.0.0:1053",
   "ipv6": false,
-  "prefer-h3": true,
+  "prefer-h3": false,
   "respect-rules": true,
   "use-system-hosts": false,
   "use-hosts": true,
@@ -38,12 +38,15 @@ const dnsConfig = {
     "ntp.*.com",
     "pool.ntp.org",
     "+.market.xiaomi.com",
-    "internal.corp"
+    "internal.corp",
+    "connectivitycheck.gstatic.com",
+    "connectivitycheck.android.com",
+    "captive.apple.com",
+    "www.apple.com"
   ],
   "default-nameserver": [
     "223.5.5.5",
-    "120.53.53.53",
-    "8.8.8.8"
+    "120.53.53.53"
   ],
   "nameserver": [...foreignNameservers],
   "proxy-server-nameserver": [...domesticNameservers],
@@ -53,6 +56,36 @@ const dnsConfig = {
     "geosite:private,cn": [...domesticNameservers],
     "geosite:geolocation-!cn": [...foreignNameservers]
   }
+};
+
+// 新增：TUN 配置，确保系统级流量真正被接管，防止DNS/流量绕过
+const tunConfig = {
+  "enable": true,
+  "stack": "mixed",
+  "auto-route": true,
+  "auto-detect-interface": true,
+  "strict-route": true,
+  "dns-hijack": ["any:53", "tcp://any:53"],
+  "mtu": 1500,
+  "ipv6": false
+};
+
+// 新增：域名嗅探，TLS SNI / HTTP Host 兜底识别，提升fake-ip场景下规则匹配的准确性
+const snifferConfig = {
+  "enable": true,
+  "sniff": {
+    "TLS": { "ports": [443, 8443] },
+    "HTTP": { "ports": [80, "8080-8880"] }
+  },
+  "force-dns-mapping": true,
+  "parse-pure-ip": true
+};
+
+// 新增：geoip/geosite 底层数据源镜像，风格与 rule-providers 保持一致，提升境内可用性
+const geoxUrlConfig = {
+  "geoip": "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat",
+  "geosite": "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat",
+  "mmdb": "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb"
 };
 
 const ruleProviderCommon = {
@@ -264,6 +297,12 @@ function main(config) {
   }
 
   config["dns"] = dnsConfig;
+  config["tun"] = tunConfig;
+  config["sniffer"] = snifferConfig;
+  config["geox-url"] = geoxUrlConfig;
+  config["geodata-mode"] = true;
+  config["geo-auto-update"] = true;
+  config["geo-update-interval"] = 24;
 
   config["proxy-groups"] = [
     {
