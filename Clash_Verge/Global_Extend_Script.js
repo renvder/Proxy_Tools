@@ -1,13 +1,13 @@
 const domesticNameservers = [
   "https://223.5.5.5/dns-query",
-  "https://120.53.53.53/dns-query",
   "https://doh.pub/dns-query"
 ];
 
 const foreignNameservers = [
-  "https://1.1.1.1/dns-query#節點選擇",
-  "https://8.8.8.8/dns-query#節點選擇",
-  "https://208.67.222.222/dns-query#節點選擇"
+  "https://208.67.222.222/dns-query",
+  "https://1.1.1.1/dns-query",
+  "https://8.8.8.8/dns-query",
+  "https://8.8.4.4/dns-query"
 ];
 
 const dnsConfig = {
@@ -17,75 +17,30 @@ const dnsConfig = {
   "prefer-h3": false,
   "respect-rules": true,
   "use-system-hosts": false,
-  "use-hosts": true,
   "cache-algorithm": "arc",
   "enhanced-mode": "fake-ip",
   "fake-ip-range": "198.18.0.1/16",
-  "fake-ip-filter-mode": "blacklist",
   "fake-ip-filter": [
     "+.lan",
     "+.local",
-    "+.arpa",
-    "localhost",
     "+.msftconnecttest.com",
     "+.msftncsi.com",
-    "www.msftconnecttest.com",
     "localhost.ptlogin2.qq.com",
     "localhost.sec.qq.com",
-    "localhost.work.weixin.qq.com",
+    "+.in-addr.arpa",
+    "+.ip6.arpa",
     "time.*.com",
     "time.*.gov",
-    "ntp.*.com",
     "pool.ntp.org",
-    "+.market.xiaomi.com",
-    "internal.corp",
-    "connectivitycheck.gstatic.com",
-    "connectivitycheck.android.com",
-    "captive.apple.com",
-    "www.apple.com"
+    "localhost.work.weixin.qq.com"
   ],
-  "default-nameserver": [
-    "223.5.5.5",
-    "120.53.53.53"
-  ],
+  "default-nameserver": ["223.5.5.5", "1.2.4.8"],
   "nameserver": [...foreignNameservers],
   "proxy-server-nameserver": [...domesticNameservers],
   "direct-nameserver": [...domesticNameservers],
-  "direct-nameserver-follow-policy": false,
   "nameserver-policy": {
-    "geosite:private,cn": [...domesticNameservers],
-    "geosite:geolocation-!cn": [...foreignNameservers]
+    "geosite:private,cn": domesticNameservers
   }
-};
-
-// 新增：TUN 配置，确保系统级流量真正被接管，防止DNS/流量绕过
-const tunConfig = {
-  "enable": true,
-  "stack": "mixed",
-  "auto-route": true,
-  "auto-detect-interface": true,
-  "strict-route": true,
-  "dns-hijack": ["any:53", "tcp://any:53"],
-  "mtu": 1500,
-  "ipv6": false
-};
-
-// 新增：域名嗅探，TLS SNI / HTTP Host 兜底识别，提升fake-ip场景下规则匹配的准确性
-const snifferConfig = {
-  "enable": true,
-  "sniff": {
-    "TLS": { "ports": [443, 8443] },
-    "HTTP": { "ports": [80, "8080-8880"] }
-  },
-  "force-dns-mapping": true,
-  "parse-pure-ip": true
-};
-
-// 新增：geoip/geosite 底层数据源镜像，风格与 rule-providers 保持一致，提升境内可用性
-const geoxUrlConfig = {
-  "geoip": "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geoip.dat",
-  "geosite": "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/geosite.dat",
-  "mmdb": "https://fastly.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@release/country.mmdb"
 };
 
 const ruleProviderCommon = {
@@ -99,79 +54,79 @@ const ruleProviders = {
     ...ruleProviderCommon,
     "behavior": "domain",
     "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt",
-    "path": "./ruleset/loyzw/reject.yaml"
+    "path": "./ruleset/loyalsoldier/reject.yaml"
   },
   "icloud": {
     ...ruleProviderCommon,
     "behavior": "domain",
     "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/icloud.txt",
-    "path": "./ruleset/zw/icloud.yaml"
+    "path": "./ruleset/loyalsoldier/icloud.yaml"
   },
   "apple": {
     ...ruleProviderCommon,
     "behavior": "domain",
     "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/apple.txt",
-    "path": "./ruleset/zw/apple.yaml"
+    "path": "./ruleset/loyalsoldier/apple.yaml"
   },
   "google": {
     ...ruleProviderCommon,
     "behavior": "domain",
     "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/google.txt",
-    "path": "./ruleset/zw/google.yaml"
+    "path": "./ruleset/loyalsoldier/google.yaml"
   },
   "proxy": {
     ...ruleProviderCommon,
     "behavior": "domain",
     "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/proxy.txt",
-    "path": "./ruleset/zw/proxy.yaml"
+    "path": "./ruleset/loyalsoldier/proxy.yaml"
   },
   "direct": {
     ...ruleProviderCommon,
     "behavior": "domain",
     "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt",
-    "path": "./ruleset/zw/direct.yaml"
+    "path": "./ruleset/loyalsoldier/direct.yaml"
   },
   "private": {
     ...ruleProviderCommon,
     "behavior": "domain",
     "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/private.txt",
-    "path": "./ruleset/zw/private.yaml"
+    "path": "./ruleset/loyalsoldier/private.yaml"
   },
   "gfw": {
     ...ruleProviderCommon,
     "behavior": "domain",
     "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/gfw.txt",
-    "path": "./ruleset/zw/gfw.yaml"
+    "path": "./ruleset/loyalsoldier/gfw.yaml"
   },
   "tld-not-cn": {
     ...ruleProviderCommon,
     "behavior": "domain",
     "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/tld-not-cn.txt",
-    "path": "./ruleset/zw/tld-not-cn.yaml"
+    "path": "./ruleset/loyalsoldier/tld-not-cn.yaml"
   },
   "telegramcidr": {
     ...ruleProviderCommon,
     "behavior": "ipcidr",
     "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/telegramcidr.txt",
-    "path": "./ruleset/zw/telegramcidr.yaml"
+    "path": "./ruleset/loyalsoldier/telegramcidr.yaml"
   },
   "cncidr": {
     ...ruleProviderCommon,
     "behavior": "ipcidr",
     "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/cncidr.txt",
-    "path": "./ruleset/zw/cncidr.yaml"
+    "path": "./ruleset/loyalsoldier/cncidr.yaml"
   },
   "lancidr": {
     ...ruleProviderCommon,
     "behavior": "ipcidr",
     "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/lancidr.txt",
-    "path": "./ruleset/zw/lancidr.yaml"
+    "path": "./ruleset/loyalsoldier/lancidr.yaml"
   },
   "applications": {
     ...ruleProviderCommon,
     "behavior": "classical",
     "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/applications.txt",
-    "path": "./ruleset/zw/applications.yaml"
+    "path": "./ruleset/loyalsoldier/applications.yaml"
   },
   "bahamut": {
     ...ruleProviderCommon,
@@ -215,17 +170,17 @@ const ruleProviders = {
     "url": "https://fastly.jsdelivr.net/gh/xiaolin-007/clash@main/rule/TikTok.txt",
     "path": "./ruleset/xiaolin-007/TikTok.yaml"
   },
+  "Microsoft": {
+    ...ruleProviderCommon,
+    "behavior": "classical",
+    "url": "https://fastly.jsdelivr.net/gh/xiaolin-007/clash@main/rule/Microsoft.txt",
+    "path": "./ruleset/xiaolin-007/Microsoft.yaml"
+  },
   "Steam": {
     ...ruleProviderCommon,
     "behavior": "classical",
     "url": "https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Steam/Steam.yaml",
     "path": "./ruleset/blackmatrix7/steam.yaml"
-  },
-  "microsoft": {
-    ...ruleProviderCommon,
-    "behavior": "classical",
-    "url": "https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Microsoft/Microsoft.yaml",
-    "path": "./ruleset/blackmatrix7/microsoft.yaml"
   },
   "Blizzard": {
     ...ruleProviderCommon,
@@ -236,7 +191,6 @@ const ruleProviders = {
 };
 
 const rules = [
-  "DOMAIN-KEYWORD,adobe,REJECT",
   "PROCESS-NAME,steam.exe,Steam遊戲",
   "PROCESS-NAME,steamwebhelper.exe,Steam遊戲",
   "PROCESS-NAME,cs2.exe,Steam遊戲",
@@ -255,14 +209,14 @@ const rules = [
   "RULE-SET,applications,全局直連",
   "RULE-SET,private,全局直連",
   "RULE-SET,reject,廣告過濾",
-  "RULE-SET,icloud,蘋果服務",
+  "RULE-SET,Microsoft,微軟服務",
+  "RULE-SET,icloud,iCloud服務",
   "RULE-SET,apple,蘋果服務",
-  "RULE-SET,microsoft,微软服務",
   "RULE-SET,YouTube,YouTube",
   "RULE-SET,Netflix,Netflix",
   "RULE-SET,bahamut,動畫瘋",
   "RULE-SET,Spotify,Spotify",
-  "RULE-SET,BilibiliHMT,哔哩哔哩港澳台",
+  "RULE-SET,BilibiliHMT,嗶哩嗶哩港澳台",
   "RULE-SET,AI,AI",
   "RULE-SET,TikTok,TikTok",
   "RULE-SET,google,谷歌服務",
@@ -293,16 +247,10 @@ function main(config) {
   const proxyProviderCount =
     typeof config?.["proxy-providers"] === "object" ? Object.keys(config["proxy-providers"]).length : 0;
   if (proxyCount === 0 && proxyProviderCount === 0) {
-    throw new Error("配置文件中未找到任何代理");
+    throw new Error("設定檔中未找到任何代理");
   }
 
   config["dns"] = dnsConfig;
-  config["tun"] = tunConfig;
-  config["sniffer"] = snifferConfig;
-  config["geox-url"] = geoxUrlConfig;
-  config["geodata-mode"] = true;
-  config["geo-auto-update"] = true;
-  config["geo-update-interval"] = 24;
 
   config["proxy-groups"] = [
     {
@@ -381,11 +329,19 @@ function main(config) {
     },
     {
       ...groupBaseOption,
-      "name": "微软服務",
+      "name": "微軟服務",
       "type": "select",
       "proxies": ["全局直連", "節點選擇"],
       "include-all": true,
       "icon": "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/microsoft.svg"
+    },
+    {
+      ...groupBaseOption,
+      "name": "iCloud服務",
+      "type": "select",
+      "proxies": ["全局直連", "節點選擇"],
+      "include-all": true,
+      "icon": "https://fastly.jsdelivr.net/gh/xiaolin-007/clash@main/icon/iCloud.svg"
     },
     {
       ...groupBaseOption,
@@ -406,7 +362,7 @@ function main(config) {
     },
     {
       ...groupBaseOption,
-      "name": "哔哩哔哩港澳台",
+      "name": "嗶哩嗶哩港澳台",
       "type": "select",
       "proxies": ["全局直連", "節點選擇"],
       "include-all": true,
@@ -435,6 +391,13 @@ function main(config) {
       "proxies": ["DIRECT", "節點選擇"],
       "include-all": true,
       "icon": "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/link.svg"
+    },
+    {
+      ...groupBaseOption,
+      "name": "全局攔截",
+      "type": "select",
+      "proxies": ["REJECT", "DIRECT"],
+      "icon": "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/block.svg"
     },
     {
       ...groupBaseOption,
