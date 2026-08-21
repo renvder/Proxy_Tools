@@ -1,10 +1,10 @@
-# LibreWolf 瀏覽器 WebRTC 與位置隱私防護設定
+# LibreWolf 瀏覽器 WebRTC、QUIC 與位置隱私防護設定
 
-本指南說明如何透過 `about:config` 控制 LibreWolf 的 WebRTC 行為，降低真實 IP 位址與區域網路 IP 位址洩漏的風險，並徹底封鎖網站位置權限。
+本指南說明如何透過 `about:config` 控制 LibreWolf 的 WebRTC 與 QUIC 行為，降低真實 IP 位址與區域網路 IP 位址洩漏的風險，並徹底封鎖網站位置權限。
 
 ---
 
-## 一、透過 `about:config` 進行 WebRTC 精細控制
+## 一、透過 `about:config` 進行 WebRTC 與 QUIC 設定
 
 1. 在 LibreWolf 網址列輸入：
 
@@ -88,6 +88,30 @@ true
 
 ---
 
+### 4. 禁用 QUIC (HTTP/3) 協定
+
+在搜尋欄輸入：
+
+```text
+network.http.http3.enable
+```
+
+將值設定為：
+
+```text
+false
+```
+
+#### 保護效果與操作目的
+
+- **防止 UDP 流量繞過 Proxy：** QUIC 基於 UDP 協定。許多代理軟體或節點預設僅接管 TCP 流量，若開啟 QUIC，流量可能會嘗試直連目標伺服器，進而繞過代理管道洩漏真實 IP 位址。
+- **確保 DNS 與分流規則生效：** 強制瀏覽器使用 TCP 進行連線，可確保所有網路請求完全遵循代理軟體所設定的加密隧道、分流規則與防洩漏 DNS。
+- **降低網路指紋關聯風險：** 避免 QUIC 的 Connection ID 特性在網路環境切換時被網路觀察者用作跨 IP 追蹤的指紋。
+
+> 若平時有使用 Proxy 或 VPN 習慣，強烈建議將此項設定改為 `false`。
+
+---
+
 ## 二、徹底封鎖網站位置權限
 
 > 此設定可阻止新網站要求取得你的瀏覽器位置，並可撤銷先前已授予的位置權限。
@@ -167,6 +191,16 @@ true
 
 ---
 
+### 驗證 QUIC 禁用狀態
+
+1. 按下 `F12` 開啟開發者工具，切換至 **網路（Network）** 分頁。
+2. 前往任意支援 HTTP/3 的網站（例如 `cloudflare.com` 或 `google.com`）。
+3. 檢查「協定（Protocol）」欄位：
+   - 確認僅顯示 `h2`（HTTP/2）或 `http/1.1`。
+   - 確認不再出現 `h3`，即代表 QUIC 協定已成功停用。
+
+---
+
 ### 驗證位置權限
 
 1. 前往會要求位置權限的網站，例如地圖、天氣或購物網站。
@@ -186,6 +220,7 @@ true
 | `media.peerconnection.ice.proxy_only` | `true` | 強制 WebRTC 流量透過 Proxy |
 | `media.peerconnection.ice.default_address_only` | `true` | 限制 WebRTC 使用預設路由 IP |
 | `media.peerconnection.ice.no_host` | `true` | 禁止收集 WebRTC Host Candidates |
+| `network.http.http3.enable` | `false` | 禁用 QUIC (HTTP/3)，防止流量繞過 Proxy |
 | 位置權限清單中的已允許網站 | 移除或設為 `封鎖` | 撤銷先前已授予的位置存取權 |
 | 封鎖新網站取得您所在位置的請求 | 勾選 | 防止新網站要求取得位置權限 |
 | Proxy／VPN | 測試前啟用 | 協助隱藏 IP 位址並測試洩漏情況 |
