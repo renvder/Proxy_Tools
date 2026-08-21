@@ -66,10 +66,10 @@ Experimental QUIC protocol
    brave://settings/shields
    ```
 
-2. 找到 `Fingerprinting protection` 並設定為：
+2. 找到 `封鎖指紋識別功能` 並設定為：
 
    ```text
-   Strict
+   嚴格，可能會​​破壞網站
    ```
 
 #### 保護效果
@@ -86,10 +86,10 @@ Brave 可透過 **Farbling** 保護機制，使 Canvas、WebGL、WebGPU 及音�
    brave://settings/privacy
    ```
 
-2. 找到 `WebRTC IP Handling Policy` 並選擇：
+2. 找到 `WebRTC IP 處理政策` 並選擇：
 
    ```text
-   Disable non-proxied UDP
+   禁用非代理 UDP
    ```
 
 #### 保護效果
