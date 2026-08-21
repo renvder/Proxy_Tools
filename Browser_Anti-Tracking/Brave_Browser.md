@@ -1,10 +1,10 @@
-# Brave Browser Fingerprint, WebRTC, and Location Privacy Guide
+# Brave Browser Fingerprint, WebRTC, QUIC, and DNS Privacy Protection Guide
 
-This guide explains how to strengthen fingerprinting resistance, reduce WebRTC IP leak risks, and block websites from accessing location information in Brave Browser.
+This guide explains how to strengthen fingerprinting resistance, disable the QUIC protocol and Secure DNS to prevent traffic and DNS leaks, reduce WebRTC IP leak risks, and completely block website location permissions in Brave Browser.
 
 ---
 
-## Step 1: Enable Experimental Protections Through Flags
+## Step 1: Configure Experimental Protections Through Flags
 
 1. Enter the following address in the Brave address bar:
 
@@ -12,26 +12,55 @@ This guide explains how to strengthen fingerprinting resistance, reduce WebRTC I
    brave://flags
    ```
 
-2. Search for:
+2. Press Enter.
 
-   ```text
-   Fingerprinting
-   ```
+---
 
-3. Change relevant experimental options from **Default** to **Enabled**.
+### 1. Enable Experimental Fingerprinting Protection
 
-   Possible options may include:
+Search for:
 
-   - `Enable Fingerprinting Protection`
-   - `Farbling enhancements`
+```text
+Fingerprinting
+```
+
+Change relevant experimental options from **Default** to **Enabled**.
+
+Possible options may include:
+
+- `Enable Fingerprinting Protection`
+- `Farbling enhancements`
 
 > **Note:** Experimental flags may be renamed, changed, or removed in future Brave releases. If these options are unavailable, rely on Brave's built-in Shields settings.
 
 ---
 
-## Step 2: Configure Shields, WebRTC, and Location Permissions
+### 2. Disable the QUIC Transport Protocol
 
-### Enable Strict Fingerprinting Protection
+Search for:
+
+```text
+QUIC
+```
+
+Locate:
+
+```text
+Experimental QUIC protocol
+```
+
+Change its status from **Default** to **Disabled**, then click **Relaunch** at the bottom right to restart the browser.
+
+#### Protection Effect and Purpose
+
+- **Prevents UDP Traffic from Bypassing Proxy:** QUIC is a UDP-based protocol. Some proxy applications, servers, or routing rules handle UDP traffic less reliably than TCP. If QUIC is enabled, traffic or DNS queries may bypass proxy routing rules and connect directly, leaking your real IP address.
+- **Forces TCP Fallback:** Disabling QUIC forces the browser to fall back to traditional TCP connections, ensuring all web requests strictly follow the encrypted tunnel, routing rules, and leak-prevention DNS configured in your proxy client.
+
+---
+
+## Step 2: Configure Shields, Privacy, DNS, and Location Permissions
+
+### 1. Enable Strict Fingerprinting Protection
 
 1. Open:
 
@@ -39,13 +68,7 @@ This guide explains how to strengthen fingerprinting resistance, reduce WebRTC I
    brave://settings/shields
    ```
 
-2. Locate:
-
-   ```text
-   Fingerprinting protection
-   ```
-
-3. Set it to:
+2. Locate `Fingerprinting protection` and set it to:
 
    ```text
    Strict
@@ -53,22 +76,11 @@ This guide explains how to strengthen fingerprinting resistance, reduce WebRTC I
 
 #### Protection Effect
 
-Brave can use its **Farbling** protections to cause some browser characteristics to vary across sessions.
-
-Potentially affected fingerprinting sources include:
-
-- Canvas
-- WebGL
-- WebGPU
-- Audio fingerprinting APIs
-
-This makes it more difficult for websites to build a stable browser fingerprint for cross-site tracking.
+Brave uses its **Farbling** mechanism to introduce subtle, randomized variations into browser characteristics across sessions. Affected sources include Canvas, WebGL, WebGPU, and Audio fingerprinting APIs, making it significantly harder for websites to build a persistent browser fingerprint for cross-site tracking.
 
 ---
 
-### Configure the WebRTC IP Handling Policy
-
-> This setting can help prevent WebRTC from bypassing a proxy or VPN and exposing your real IP address.
+### 2. Configure WebRTC IP Handling Policy
 
 1. Open:
 
@@ -76,13 +88,7 @@ This makes it more difficult for websites to build a stable browser fingerprint 
    brave://settings/privacy
    ```
 
-2. Locate:
-
-   ```text
-   WebRTC IP Handling Policy
-   ```
-
-3. Select:
+2. Locate `WebRTC IP Handling Policy` and select:
 
    ```text
    Disable non-proxied UDP
@@ -90,13 +96,28 @@ This makes it more difficult for websites to build a stable browser fingerprint 
 
 #### Protection Effect
 
-This option attempts to route WebRTC traffic through the proxy or use TCP instead, reducing the risk that WebRTC UDP traffic bypasses proxy routing and leaks your real public IP address.
+Routes WebRTC traffic through the proxy or forces TCP connections instead, preventing non-proxied WebRTC UDP traffic from bypassing proxy rules and exposing your real public IP address.
 
 ---
 
-### Block Website Location Permissions
+### 3. Disable Secure DNS (DNS over HTTPS / DoH)
 
-> This setting prevents websites from using the browser's location API to request your precise or approximate location.
+1. Search for `DNS` in the Brave settings search bar, or navigate to:
+
+   ```text
+   Settings → Privacy and security → Security
+   ```
+
+2. Locate **Use secure DNS**.
+3. Toggle the setting completely **Off**.
+
+#### Protection Effect and Purpose
+
+When Chrome/Brave's built-in **DNS over HTTPS (DoH)** is enabled, the browser may perform encrypted DNS queries independently, bypassing local proxy clients or system DNS settings. Disabling this option ensures all DNS resolution requests are handled through your local proxy software or designated DNS server.
+
+---
+
+### 4. Block Website Location Permissions
 
 1. Open:
 
@@ -104,11 +125,7 @@ This option attempts to route WebRTC traffic through the proxy or use TCP instea
    brave://settings/content/location
    ```
 
-   If the direct URL does not work, navigate to:
-
-   ```text
-   Settings → Privacy and security → Site and Shields Settings → Location
-   ```
+   (Or navigate via: `Settings → Privacy and security → Site and Shields Settings → Location`)
 
 2. Set the default behavior to:
 
@@ -116,76 +133,32 @@ This option attempts to route WebRTC traffic through the proxy or use TCP instea
    Don't allow sites to see your location
    ```
 
-3. Review the list of websites that have already been allowed to access your location.
-4. For any unnecessary permission, open the site's menu and select:
-
-   ```text
-   Block
-   ```
-
-   or:
-
-   ```text
-   Remove
-   ```
+3. Review the list of allowed location websites below and set unnecessary entries to **Block** or **Remove**.
 
 #### Protection Effect
 
-- Prevents websites from using browser location services to obtain your precise location.
-- Reduces the chance that websites infer your area through Wi-Fi, GPS, operating system location services, or nearby network information.
-- Works well alongside a proxy or VPN, preventing websites from comparing IP-based location with browser location permission data.
-
-> **Note:** Disabling location permission does not hide your IP address. Websites may still estimate your country, city, or ISP from your IP address. Use a properly configured proxy or VPN if IP masking is required.
+Prevents websites from obtaining precise geographic location via the browser's location API, avoiding cross-referencing between IP location and browser location permissions.
 
 ---
 
 ## Step 3: Verify Protection Effectiveness
 
-### Verify Fingerprint Randomization
+After applying the settings and enabling your proxy or VPN, perform the following verification tests:
 
-1. Visit a browser fingerprint testing website, such as:
+### 1. Verify Fingerprint Randomization
+Visit [BrowserScan](https://www.browserscan.net/) or [Cover Your Tracks](https://coveryourtracks.eff.org/) to record Canvas/WebGL fingerprint values. Open a new Incognito window or restart Brave, then test again to confirm the values change across sessions.
 
-   - [BrowserScan](https://www.browserscan.net/)
-   - [Cover Your Tracks](https://coveryourtracks.eff.org/)
-   - [BrowserLeaks](https://browserleaks.com/)
+### 2. Verify WebRTC IP Leak Protection
+Visit [BrowserLeaks WebRTC Test](https://browserleaks.com/webrtc) to confirm that your real public IP address, original ISP IP address, and local/private network IP addresses are not displayed.
 
-2. Record the reported fingerprint values, especially:
+### 3. Verify QUIC Protocol Status
+Press `F12` to open Developer Tools and switch to the **Network** tab. Visit an HTTP/3-enabled site like `cloudflare.com` or `google.com`. Check the **Protocol** column to ensure it shows only `h2` or `http/1.1`, and that `h3` no longer appears.
 
-   - Canvas fingerprint
-   - WebGL fingerprint
-   - AudioHash
+### 4. Verify DNS Leak Protection
+Visit [DNS Leak Test](https://dnsleaktest.com/) and run an **Extended Test**. Confirm that local ISP DNS servers or unexpected direct domestic DNS nodes do not appear in the results.
 
-3. Open a new Incognito window, or fully restart Brave.
-4. Visit the same testing website again.
-5. Check whether the fingerprint values change across sessions.
-
----
-
-### Verify WebRTC IP Leaks
-
-1. Enable your proxy or VPN.
-2. Visit a WebRTC leak testing page:
-
-   - [BrowserLeaks WebRTC Test](https://browserleaks.com/webrtc)
-
-3. Confirm that the page does not reveal:
-
-   - Your real public IP address
-   - Your original ISP IP address
-   - Local or private network IP addresses
-   - Unexpected IPv6 addresses
-
----
-
-### Verify Location Permissions
-
-1. Visit a website that normally requests location access, such as a map, weather, or shopping website.
-2. The website should be unable to obtain browser location, or should report that location access is blocked.
-3. Click the site controls icon to the left of the address bar and confirm:
-
-   ```text
-   Location: Block
-   ```
+### 5. Verify Location Permissions
+Visit a map or weather website to confirm it cannot request or obtain browser location access, and that `Location: Block` is displayed in the site settings.
 
 ---
 
@@ -193,9 +166,11 @@ This option attempts to route WebRTC traffic through the proxy or use TCP instea
 
 | Setting | Recommended Value | Purpose |
 |---|---|---|
-| Fingerprinting protection | `Strict` | Strengthens resistance to browser fingerprinting |
-| Fingerprinting-related flags | Set to `Enabled` when available | Enables additional experimental fingerprinting protections |
+| Fingerprinting protection | `Strict` | Strengthens resistance to browser fingerprinting via Farbling randomization |
+| Fingerprinting-related flags | `Enabled` (when available) | Enables additional experimental fingerprinting protections |
+| Experimental QUIC protocol | `Disabled` | Disables QUIC/UDP traffic to prevent proxy rule bypass |
 | WebRTC IP Handling Policy | `Disable non-proxied UDP` | Reduces the risk of WebRTC UDP traffic bypassing the proxy |
+| Use secure DNS (Secure DNS / DoH) | `Off` | Prevents the browser from bypassing system/proxy DNS handling |
 | Location permission | `Don't allow sites to see your location` | Prevents websites from accessing browser location data |
 | Previously allowed location sites | Remove or set to `Block` | Revokes location permissions previously granted to websites |
-| Proxy / VPN | Enable before testing | Helps mask IP addresses and test for leaks |
+| Proxy / VPN | Enable before testing | Helps mask IP addresses and allows comprehensive leak testing |
