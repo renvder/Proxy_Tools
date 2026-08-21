@@ -1,10 +1,10 @@
-# LibreWolf WebRTC and Location Privacy Protection Settings
+# LibreWolf WebRTC, QUIC, and Location Privacy Protection Settings
 
-This guide explains how to use `about:config` to control WebRTC behavior in LibreWolf, reduce the risk of public and local IP address leaks, and completely block website location permissions.
+This guide explains how to use `about:config` to control WebRTC and QUIC behavior in LibreWolf, reduce the risk of public and local IP address leaks, and completely block website location permissions.
 
 ---
 
-## 1. Fine-Tune WebRTC Through `about:config`
+## 1. Fine-Tune WebRTC and QUIC Through `about:config`
 
 1. Enter the following address in the LibreWolf address bar:
 
@@ -88,6 +88,30 @@ true
 
 ---
 
+### 4. Disable QUIC (HTTP/3) Protocol
+
+Search for:
+
+```text
+network.http.http3.enable
+```
+
+Set the value to:
+
+```text
+false
+```
+
+#### Protection Effect and Purpose
+
+- **Prevents UDP Traffic from Bypassing Proxy:** QUIC runs over UDP. Many proxy tools or nodes default to routing only TCP traffic. If QUIC is enabled, traffic may attempt direct connections to target servers via UDP, bypassing proxy tunnels and exposing your real IP address.
+- **Ensures DNS and Routing Rules Apply:** Forcing the browser to use TCP ensures all web traffic strictly follows the encrypted tunnel, routing rules, and leak-prevention DNS settings configured in your proxy client.
+- **Reduces Network Fingerprint Association:** Prevents QUIC's Connection ID mechanism from being used by network observers to track your device across different IP addresses during network switches.
+
+> If you regularly use a proxy or VPN, disabling QUIC (setting the value to `false`) is strongly recommended.
+
+---
+
 ## 2. Completely Block Website Location Permissions
 
 > This setting blocks new websites from requesting your browser location and allows you to revoke location permissions granted previously.
@@ -167,6 +191,16 @@ true
 
 ---
 
+### Verify QUIC Disabling
+
+1. Press `F12` to open Developer Tools and switch to the **Network** tab.
+2. Visit any website supporting HTTP/3 (e.g., `cloudflare.com` or `google.com`).
+3. Check the **Protocol** column:
+   - Confirm it shows only `h2` (HTTP/2) or `http/1.1`.
+   - Confirm `h3` no longer appears, indicating QUIC is successfully disabled.
+
+---
+
 ### Verify Location Permissions
 
 1. Visit a website that normally requests location access, such as a map, weather, or shopping website.
@@ -186,6 +220,7 @@ true
 | `media.peerconnection.ice.proxy_only` | `true` | Forces WebRTC traffic through a proxy |
 | `media.peerconnection.ice.default_address_only` | `true` | Restricts WebRTC to the default route IP |
 | `media.peerconnection.ice.no_host` | `true` | Prevents WebRTC Host Candidate collection |
+| `network.http.http3.enable` | `false` | Disables QUIC (HTTP/3) to prevent proxy bypass |
 | Previously allowed location websites | Remove or set to `Block` | Revokes location access previously granted to websites |
 | Block new requests asking to access your location | Enabled | Prevents new websites from requesting location access |
 | Proxy / VPN | Enable before testing | Helps mask IP addresses and test for leaks |
