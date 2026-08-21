@@ -17,7 +17,6 @@ Shadowrocket - [Download](https://apps.apple.com/app/shadowrocket)
 
 Shadowrocket - < [Config](https://raw.githubusercontent.com/renvder/Proxy_Tools/refs/heads/main/Shadowrocket/Config.conf) >  
 Clash Verge - < [Script](https://github.com/renvder/Proxy_Tools/blob/main/Clash_Verge/Global_Extend_Script.js) > < [Overwrite](https://github.com/renvder/Proxy_Tools/blob/main/Clash_Verge/DNS_Overwriter.yaml) >  
-Chromium Browser - < [Setting](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/Chromium_DNS_Fix.md) > < [設定](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/Chromium_DNS_Fix_tw.md) >  
 
 ---  
 
