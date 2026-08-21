@@ -1,13 +1,12 @@
 const domesticNameservers = [
-  "https://223.5.5.5/dns-query",
+  "https://dns.alidns.com/dns-query",
   "https://doh.pub/dns-query"
 ];
 
 const foreignNameservers = [
-  "https://208.67.222.222/dns-query",
-  "https://1.1.1.1/dns-query",
-  "https://8.8.8.8/dns-query",
-  "https://8.8.4.4/dns-query"
+  "https://doh.opendns.com/dns-query",
+  "https://cloudflare-dns.com/dns-query",
+  "https://dns.google/dns-query"
 ];
 
 const dnsConfig = {
