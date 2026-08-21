@@ -1,37 +1,64 @@
-# Brave 瀏覽器指紋、WebRTC 與位置隱私保護指南
+# Brave 瀏覽器指紋、WebRTC、QUIC 與 DNS 隱私防護整合指南
 
-本指南說明如何在 Brave 瀏覽器中強化防指紋追蹤、降低 WebRTC 真實 IP 洩漏風險，並封鎖網站取得裝置位置資訊。
-
----
-
-## 步驟 1：透過 Flags 啟用實驗性防護功能
-
-1. 在 Brave 網址列輸入：
-
-   ```text
-   brave://flags
-   ```
-
-2. 在搜尋欄輸入：
-
-   ```text
-   Fingerprinting
-   ```
-
-3. 將相關實驗性選項從 **Default** 改為 **Enabled**。
-
-   可能包含以下項目：
-
-   - `Enable Fingerprinting Protection`
-   - `Farbling enhancements`
-
-> **注意：** 實驗性 Flags 的名稱、功能或可用性，可能會隨 Brave 版本更新而變更或移除。若搜尋不到相關項目，請以 Brave 的內建 Shields 設定為主。
+本指南說明如何在 Brave 瀏覽器中強化防指紋追蹤、停用 QUIC 協定与安全 DNS 以防止流量及 DNS 洩漏、降低 WebRTC 真實 IP 洩漏風險，並徹底封鎖網站取得位置權限。
 
 ---
 
-## 步驟 2：設定 Shields、WebRTC 與位置權限
+## 步驟 1：透過 Flags 調整實驗性防護功能
 
-### 啟用嚴格指紋保護
+在 Brave 網址列輸入：
+
+```text
+brave://flags
+```
+
+並按下 Enter。
+
+---
+
+### 1. 啟用實驗性防指紋功能
+
+在搜尋欄輸入：
+
+```text
+Fingerprinting
+```
+
+將相關實驗性選項從 **Default** 改為 **Enabled**，可能包含：
+
+- `Enable Fingerprinting Protection`
+- `Farbling enhancements`
+
+> **注意：** 實驗性 Flags 的名稱或可用性可能會隨 Brave 版本更新而變更。若搜尋不到相關項目，請以 Brave 內建的 Shields 設定為主。
+
+---
+
+### 2. 停用 QUIC 傳輸協定
+
+在搜尋欄輸入：
+
+```text
+QUIC
+```
+
+找到：
+
+```text
+Experimental QUIC protocol
+```
+
+將狀態從 **Default** 改為 **Disabled**，隨後點擊右下角的 **Relaunch** 重新啟動瀏覽器。
+
+#### 設定原理與保護效果
+
+- **防止 UDP 流量繞過 Proxy：** QUIC 是 Google 基于 UDP 設計的傳輸協定。部分代理軟體、節點或分流規則對 UDP 流量的接管不如 TCP 完整。若 QUIC 啟用，部分流量或 DNS 查詢可能繞過 Proxy 管道直連，洩漏真實 IP。
+- **強制回退 TCP：** 停用 QUIC 後，瀏覽器會強制使用 TCP 連線，確保所有網路請求完全遵循代理軟體所設定的加密隧道、分流規則與防洩漏 DNS。
+
+---
+
+## 步驟 2：設定 Shields、隱私權、DNS 與位置權限
+
+### 1. 啟用嚴格指紋保護
 
 1. 開啟：
 
@@ -39,13 +66,7 @@
    brave://settings/shields
    ```
 
-2. 找到：
-
-   ```text
-   Fingerprinting protection
-   ```
-
-3. 設定為：
+2. 找到 `Fingerprinting protection` 並設定為：
 
    ```text
    Strict
@@ -53,22 +74,11 @@
 
 #### 保護效果
 
-Brave 可透過 **Farbling** 保護機制，使部分瀏覽器特徵資料在不同工作階段之間產生變化。
-
-可能受影響的特徵來源包括：
-
-- Canvas
-- WebGL
-- WebGPU
-- 音訊指紋 API
-
-這能增加跨網站追蹤時建立穩定瀏覽器指紋的難度。
+Brave 可透過 **Farbling** 保護機制，使 Canvas、WebGL、WebGPU 及音訊指紋在不同工作階段（Session）之間產生隨機化變化，增加跨網站追蹤的難度。
 
 ---
 
-### 設定 WebRTC IP 處理政策
-
-> 此設定有助於避免 WebRTC 繞過 Proxy 或 VPN，進而暴露真實 IP 位址。
+### 2. 設定 WebRTC IP 處理政策
 
 1. 開啟：
 
@@ -76,13 +86,7 @@ Brave 可透過 **Farbling** 保護機制，使部分瀏覽器特徵資料在不
    brave://settings/privacy
    ```
 
-2. 找到：
-
-   ```text
-   WebRTC IP Handling Policy
-   ```
-
-3. 選擇：
+2. 找到 `WebRTC IP Handling Policy` 並選擇：
 
    ```text
    Disable non-proxied UDP
@@ -90,24 +94,33 @@ Brave 可透過 **Farbling** 保護機制，使部分瀏覽器特徵資料在不
 
 #### 保護效果
 
-此選項會讓 WebRTC 流量盡可能透過 Proxy，或改用 TCP 連線，以降低 WebRTC 的 UDP 流量繞過 Proxy 並洩漏真實公開 IP 位址的風險。
+強制 WebRTC 流量盡可能透過 Proxy 或改用 TCP 連線，避免 WebRTC 的未代理 UDP 流量繞過 Proxy 暴露真實公開 IP 位址。
 
 ---
 
-### 徹底封鎖網站位置權限
+### 3. 關閉「使用安全 DNS」（Secure DNS / DoH）
 
-> 此設定可防止網站透過瀏覽器的位置 API 取得你的精確或近似所在地區。
+1. 在 Brave 上方搜尋欄輸入 `DNS`，或依序進入：
+
+   ```text
+   設定 → 隱私權與安全性 → 安全性
+   ```
+
+2. 找到 **使用安全 DNS**（Use secure DNS）。
+3. 將開關完全關閉（**Off**）。
+
+#### 設定原理與保護效果
+
+Brave 内建的 DNS over HTTPS（DoH）若啟用，瀏覽器可能會自行發起加密 DNS 解析，繞過代理用戶端或系統的統一接管。關閉此功能可確保所有 DNS 解析請求完全交由本機代理軟體或指定 DNS 處理。
+
+---
+
+### 4. 徹底封鎖網站位置權限
 
 1. 開啟：
 
    ```text
    brave://settings/content/location
-   ```
-
-   若此網址無法直接開啟，可依序前往：
-
-   ```text
-   設定 → 隱私權與安全性 → 網站與 Shields 設定 → 位置
    ```
 
 2. 將預設行為設定為：
@@ -116,92 +129,46 @@ Brave 可透過 **Farbling** 保護機制，使部分瀏覽器特徵資料在不
    不允許網站查看你的位置
    ```
 
-   或英文介面中的：
+   （英文介面：`Don't allow sites to see your location`）
 
-   ```text
-   Don't allow sites to see your location
-   ```
-
-3. 檢查下方已允許的位置網站清單。
-4. 若有不需要的位置權限，點擊該網站旁的選單並選擇：
-
-   ```text
-   封鎖
-   ```
-
-   或：
-
-   ```text
-   移除
-   ```
+3. 檢查下方已允許的位置網站清單，將不需要的網站改為 **封鎖** 或 **移除**。
 
 #### 保護效果
 
-- 防止網站透過瀏覽器位置服務取得精確位置。
-- 降低網站根據 Wi-Fi、GPS、系統位置服務或附近網路資訊推測所在地區的可能性。
-- 適合搭配 Proxy 或 VPN 使用，避免網站同時透過 IP 位址與位置權限交叉確認地理位置。
-
-> **注意：** 關閉位置權限不會隱藏 IP 位址。網站仍可能根據 IP 位址大致推測你的國家、城市或網路供應商；如需隱藏 IP，仍須正確設定 Proxy 或 VPN。
+防止網站透過瀏覽器位置 API 取得地理位置，避免網站透過 IP 位址與位置權限進行交叉定位。
 
 ---
 
-## 步驟 3：驗證保護效果
+## 步驟 3：驗證防護效果
 
-### 驗證指紋隨機化
+完成上述設定並啟用 Proxy / VPN 後，請進行以下交叉驗證：
 
-1. 前往瀏覽器指紋偵測網站，例如：
+### 1. 驗證指紋隨機化
+造訪 [BrowserScan](https://www.browserscan.net/) 或 [Cover Your Tracks](https://coveryourtracks.eff.org/)，記錄 Canvas/WebGL 指紋。開啟新無痕視窗或重啟 Brave 後再次測試，確認指紋數值已發生變化。
 
-   - [BrowserScan](https://www.browserscan.net/)
-   - [Cover Your Tracks](https://coveryourtracks.eff.org/)
-   - [BrowserLeaks](https://browserleaks.com/)
+### 2. 驗證 WebRTC IP 洩漏
+造訪 [BrowserLeaks WebRTC Test](https://browserleaks.com/webrtc)，確認未顯示真實公開 IP、ISP 原始 IP 及區域網路內網 IP。
 
-2. 記錄網站顯示的指紋資訊，尤其是：
+### 3. 驗證 QUIC 停用狀態
+按下 `F12` 開啟開發者工具，切換至 **Network** 分頁，造訪 `cloudflare.com` 或 `google.com`。檢查 **Protocol** 欄位僅顯示 `h2` 或 `http/1.1`，不再出現 `h3`。
 
-   - Canvas 指紋
-   - WebGL 指紋
-   - AudioHash
+### 4. 驗證 DNS 洩漏
+造訪 [DNS Leak Test](https://dnsleaktest.com/)，執行 Extended Test，確認測試結果中未出現本地 ISP 提供的 DNS 伺服器或未預期的直連 DNS 節點。
 
-3. 開啟新的無痕視窗，或完全重新啟動 Brave。
-4. 再次造訪相同的測試網站。
-5. 檢查上述指紋數值是否在不同工作階段之間發生變化。
-
----
-
-### 驗證 WebRTC IP 洩漏
-
-1. 先啟用你的 Proxy 或 VPN。
-2. 前往 WebRTC 洩漏測試頁面：
-
-   - [BrowserLeaks WebRTC Test](https://browserleaks.com/webrtc)
-
-3. 確認頁面沒有顯示：
-
-   - 真實公開 IP 位址
-   - ISP 原始 IP 位址
-   - 區域網路／私人 IP 位址
-   - 不預期的 IPv6 位址
-
----
-
-### 驗證位置權限
-
-1. 開啟任何曾要求位置權限的網站，例如地圖、天氣或購物網站。
-2. 網站應無法取得瀏覽器位置，或顯示位置權限遭封鎖。
-3. 點擊網址列左側的網站控制圖示，確認：
-
-   ```text
-   位置：封鎖
-   ```
+### 5. 驗證位置權限
+造訪地圖或天氣網站，確認網站無法存取位置資訊，且網址列左側顯示 `位置：封鎖`。
 
 ---
 
 ## 建議設定總覽
 
-| 設定項目 | 建議值 | 作用 |
+| 設定項目 | 建議值 | 作用 / 目的 |
 |---|---|---|
-| Fingerprinting protection | `Strict` | 提升對瀏覽器指紋追蹤的防護 |
+| Fingerprinting protection | `Strict` | 提升對瀏覽器指紋追蹤的防護（啟用 Farbling 隨機化） |
 | 與 Fingerprinting 相關的 Flags | 可用時設為 `Enabled` | 啟用額外的實驗性指紋防護 |
+| Experimental QUIC protocol | `Disabled` | 停用 QUIC/UDP，避免流量繞過 Proxy 規則 |
 | WebRTC IP Handling Policy | `Disable non-proxied UDP` | 降低 WebRTC UDP 流量繞過 Proxy 的風險 |
+| 使用安全 DNS（Secure DNS / DoH） | `Off` | 避免瀏覽器自行發起 DoH 查詢繞過 Proxy 接管 |
 | 位置權限（Location） | `Don't allow sites to see your location` | 防止網站取得瀏覽器位置資訊 |
 | 已授權位置的網站 | 移除或設為 `Block` | 撤銷先前已授予的位置權限 |
-| Proxy／VPN | 測試前先啟用 | 協助隱藏 IP 位址並測試洩漏情況 |
+| Proxy／VPN | 測試前先啟用 | 協助隱藏 IP 位址並進行全方位洩漏測試 |
