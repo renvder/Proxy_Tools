@@ -4,9 +4,9 @@ const domesticNameservers = [
 ];
 
 const foreignNameservers = [
-  "https://doh.opendns.com/dns-query",
-  "https://cloudflare-dns.com/dns-query",
-  "https://dns.google/dns-query"
+  "https://doh.opendns.com/dns-query#節點選擇",
+  "https://cloudflare-dns.com/dns-query#節點選擇",
+  "https://dns.google/dns-query#節點選擇"
 ];
 
 const dnsConfig = {
@@ -17,28 +17,33 @@ const dnsConfig = {
   "respect-rules": true,
   "use-system-hosts": false,
   "cache-algorithm": "arc",
-  "enhanced-mode": "fake-ip",
+  "enhanced-mode": "redir-host",
   "fake-ip-range": "198.18.0.1/16",
   "fake-ip-filter": [
+
     "+.lan",
     "+.local",
+
     "+.msftconnecttest.com",
     "+.msftncsi.com",
+
     "localhost.ptlogin2.qq.com",
     "localhost.sec.qq.com",
+
     "+.in-addr.arpa",
     "+.ip6.arpa",
     "time.*.com",
     "time.*.gov",
     "pool.ntp.org",
+
     "localhost.work.weixin.qq.com"
   ],
-  "default-nameserver": ["223.5.5.5", "1.2.4.8"],
+  "default-nameserver": ["223.5.5.5","1.2.4.8"],
   "nameserver": [...foreignNameservers],
-  "proxy-server-nameserver": [...domesticNameservers],
-  "direct-nameserver": [...domesticNameservers],
+  "proxy-server-nameserver":[...domesticNameservers],
+  "direct-nameserver":[...domesticNameservers],
   "nameserver-policy": {
-    "geosite:private,cn": domesticNameservers
+  "geosite:private,cn": domesticNameservers
   }
 };
 
@@ -169,12 +174,6 @@ const ruleProviders = {
     "url": "https://fastly.jsdelivr.net/gh/xiaolin-007/clash@main/rule/TikTok.txt",
     "path": "./ruleset/xiaolin-007/TikTok.yaml"
   },
-  "Microsoft": {
-    ...ruleProviderCommon,
-    "behavior": "classical",
-    "url": "https://fastly.jsdelivr.net/gh/xiaolin-007/clash@main/rule/Microsoft.txt",
-    "path": "./ruleset/xiaolin-007/Microsoft.yaml"
-  },
   "Steam": {
     ...ruleProviderCommon,
     "behavior": "classical",
@@ -186,10 +185,20 @@ const ruleProviders = {
     "behavior": "classical",
     "url": "https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Blizzard/Blizzard.yaml",
     "path": "./ruleset/blackmatrix7/blizzard.yaml"
+  },
+
+  "microsoft": {
+    ...ruleProviderCommon,
+    "behavior": "classical",
+    "url": "https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Microsoft/Microsoft.yaml",
+    "path": "./ruleset/blackmatrix7/microsoft.yaml"
   }
 };
 
 const rules = [
+
+  "DOMAIN-KEYWORD,adobe,REJECT",
+
   "PROCESS-NAME,steam.exe,Steam遊戲",
   "PROCESS-NAME,steamwebhelper.exe,Steam遊戲",
   "PROCESS-NAME,cs2.exe,Steam遊戲",
@@ -198,19 +207,22 @@ const rules = [
   "PROCESS-NAME,WowClassic.exe,魔獸世界",
   "PROCESS-NAME,WowClassicT.exe,魔獸世界",
   "PROCESS-NAME,WowT.exe,魔獸世界",
+
   "DOMAIN-SUFFIX,googleapis.cn,節點選擇",
   "DOMAIN-SUFFIX,gstatic.com,節點選擇",
   "DOMAIN-SUFFIX,xn--ngstr-lra8j.com,節點選擇",
   "DOMAIN-SUFFIX,github.io,節點選擇",
   "DOMAIN,v2rayse.com,節點選擇",
+
   "RULE-SET,Steam,Steam遊戲",
   "RULE-SET,Blizzard,魔獸世界",
+
   "RULE-SET,applications,全局直連",
   "RULE-SET,private,全局直連",
   "RULE-SET,reject,廣告過濾",
-  "RULE-SET,Microsoft,微軟服務",
-  "RULE-SET,icloud,iCloud服務",
+  "RULE-SET,icloud,蘋果服務",
   "RULE-SET,apple,蘋果服務",
+  "RULE-SET,microsoft,微軟服務",
   "RULE-SET,YouTube,YouTube",
   "RULE-SET,Netflix,Netflix",
   "RULE-SET,bahamut,動畫瘋",
@@ -226,6 +238,7 @@ const rules = [
   "RULE-SET,lancidr,全局直連,no-resolve",
   "RULE-SET,cncidr,全局直連,no-resolve",
   "RULE-SET,telegramcidr,電報消息,no-resolve",
+
   "GEOSITE,CN,全局直連",
   "GEOIP,LAN,全局直連,no-resolve",
   "GEOIP,CN,全局直連,no-resolve",
@@ -257,7 +270,7 @@ function main(config) {
       "name": "節點選擇",
       "type": "select",
       "include-all": true,
-      "filter": "^(?!.*(官网|套餐|流量|异常|剩余)).*$",
+      "filter": "^(?!.*(官網|套餐|流量|異常|剩餘)).*$",
       "icon": "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/adjust.svg"
     },
     {
@@ -266,7 +279,7 @@ function main(config) {
       "type": "select",
       "proxies": ["全局直連", "節點選擇"],
       "include-all": true,
-      "filter": "^(?!.*(官网|套餐|流量|异常|剩余)).*$",
+      "filter": "^(?!.*(官網|套餐|流量|異常|剩餘)).*$",
       "icon": "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/steam.svg"
     },
     {
@@ -275,14 +288,14 @@ function main(config) {
       "type": "select",
       "proxies": ["節點選擇", "全局直連"],
       "include-all": true,
-      "filter": "^(?!.*(官网|套餐|流量|异常|剩余)).*$",
+      "filter": "^(?!.*(官網|套餐|流量|異常|剩餘)).*$",
       "icon": "https://upload.wikimedia.org/wikipedia/commons/e/eb/WoW_icon.svg"
     },
     {
       ...groupBaseOption,
       "name": "谷歌服務",
       "type": "select",
-      "proxies": ["節點選擇", "全局直連"],
+      "proxies": ["節點選擇","全局直連"],
       "include-all": true,
       "icon": "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/google.svg"
     },
@@ -290,7 +303,7 @@ function main(config) {
       ...groupBaseOption,
       "name": "YouTube",
       "type": "select",
-      "proxies": ["節點選擇", "全局直連"],
+      "proxies": ["節點選擇","全局直連"],
       "include-all": true,
       "icon": "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/youtube.svg"
     },
@@ -298,7 +311,7 @@ function main(config) {
       ...groupBaseOption,
       "name": "Netflix",
       "type": "select",
-      "proxies": ["節點選擇", "全局直連"],
+      "proxies": ["節點選擇","全局直連"],
       "include-all": true,
       "icon": "https://fastly.jsdelivr.net/gh/xiaolin-007/clash@main/icon/netflix.svg"
     },
@@ -306,7 +319,7 @@ function main(config) {
       ...groupBaseOption,
       "name": "電報消息",
       "type": "select",
-      "proxies": ["節點選擇", "全局直連"],
+      "proxies": ["節點選擇","全局直連"],
       "include-all": true,
       "icon": "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/telegram.svg"
     },
@@ -330,23 +343,15 @@ function main(config) {
       ...groupBaseOption,
       "name": "微軟服務",
       "type": "select",
-      "proxies": ["全局直連", "節點選擇"],
+      "proxies": ["全局直連","節點選擇"],
       "include-all": true,
       "icon": "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/microsoft.svg"
     },
     {
       ...groupBaseOption,
-      "name": "iCloud服務",
-      "type": "select",
-      "proxies": ["全局直連", "節點選擇"],
-      "include-all": true,
-      "icon": "https://fastly.jsdelivr.net/gh/xiaolin-007/clash@main/icon/iCloud.svg"
-    },
-    {
-      ...groupBaseOption,
       "name": "蘋果服務",
       "type": "select",
-      "proxies": ["節點選擇", "全局直連"],
+      "proxies": ["節點選擇","全局直連"],
       "include-all": true,
       "icon": "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/apple.svg"
     },
@@ -363,16 +368,16 @@ function main(config) {
       ...groupBaseOption,
       "name": "嗶哩嗶哩港澳台",
       "type": "select",
-      "proxies": ["全局直連", "節點選擇"],
+      "proxies": ["全局直連","節點選擇"],
       "include-all": true,
-      "filter": "^(?!.*(官网|套餐|流量|异常|剩余)).*$",
+      "filter": "^(?!.*(官網|套餐|流量|異常|剩餘)).*$",
       "icon": "https://fastly.jsdelivr.net/gh/xiaolin-007/clash@main/icon/bilibili.svg"
     },
     {
       ...groupBaseOption,
       "name": "Spotify",
       "type": "select",
-      "proxies": ["節點選擇", "全局直連"],
+      "proxies": ["節點選擇","全局直連"],
       "include-all": true,
       "icon": "https://fastly.jsdelivr.net/gh/xiaolin-007/clash@main/icon/spotify.svg"
     },
@@ -387,24 +392,17 @@ function main(config) {
       ...groupBaseOption,
       "name": "全局直連",
       "type": "select",
-      "proxies": ["DIRECT", "節點選擇"],
+      "proxies": ["DIRECT","節點選擇"],
       "include-all": true,
       "icon": "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/link.svg"
     },
     {
       ...groupBaseOption,
-      "name": "全局攔截",
-      "type": "select",
-      "proxies": ["REJECT", "DIRECT"],
-      "icon": "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/block.svg"
-    },
-    {
-      ...groupBaseOption,
       "name": "漏網之魚",
       "type": "select",
-      "proxies": ["節點選擇", "全局直連"],
+      "proxies": ["節點選擇","全局直連"],
       "include-all": true,
-      "filter": "^(?!.*(官网|套餐|流量|异常|剩余)).*$",
+      "filter": "^(?!.*(官網|套餐|流量|異常|剩餘)).*$",
       "icon": "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/fish.svg"
     }
   ];
@@ -412,10 +410,12 @@ function main(config) {
   config["rule-providers"] = ruleProviders;
   config["rules"] = rules;
 
-  if (config["proxies"]) {
+  if(config["proxies"]) {
     config["proxies"].forEach(proxy => {
-      proxy.udp = true;
-    });
+
+      proxy.udp = true
+
+    })
   }
 
   return config;
