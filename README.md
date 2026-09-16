@@ -1,5 +1,5 @@
 <p align="right">
-  🌐 <b>Language / 語言:</b>
+  🌐 <b></b>
   <a href="./README.md"><b>EN</b></a> | 
   <a href="./README_tw.md"><b>漢</b></a>
 </p>
