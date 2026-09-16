@@ -1,12 +1,18 @@
+<p align="right">
+  🌐 <b>Language / 語言:</b>
+  <a href="./README_EN.md"><b>EN</b></a> | 
+  <a href="./README.md"><b>漢</b></a>
+</p>
+
 # **Proxy Tools**
 
-**個人代理工具、DNS 洩漏防護與隱私反追蹤設定指南。**
+**A curated repository for proxy clients, DNS leak prevention configs, and privacy anti-tracking guides.**
 
 ---
 
-## **📥 代理客戶端 (Proxy Clients)**
+## **📥 Proxy Clients**
 
-| 客戶端名稱 | 支援平台 | 官方下載連結 |
+| Client Name | Supported OS | Download Link |
 | :--- | :--- | :--- |
 | **v2rayN** | Windows | [GitHub Release](https://github.com/2dust/v2rayN) |
 | **v2rayNG** | Android | [GitHub Release](https://github.com/2dust/v2rayNG) |
@@ -15,28 +21,28 @@
 
 ---
 
-## **🛡️ DNS 洩漏防護 (Fix DNS Leaks)**
+## **🛡️ Fix DNS Leaks**
 
-針對不同客戶端提供優化的 DNS 洩漏防護設定檔與擴充腳本：
+Optimized DNS leak prevention configurations and extended scripts for supported proxy clients:
 
-+ **Shadowrocket：** [`Config.ini`](https://raw.githubusercontent.com/renvder/Proxy_Tools/refs/heads/main/Shadowrocket/Config.ini)（可直接複製鏈接至軟體中匯入）
-+ **Clash Verge：** [`Global_Extend_Script.js`](https://github.com/renvder/Proxy_Tools/blob/main/Clash_Verge/Global_Extend_Script.js)（擴充腳本 / 全局覆寫配置）
-
----
-
-## **🕵️ 隱私與反追蹤 (Anti-Tracking)**
-
-提供各軟體與瀏覽器的安全性與反追蹤加固指南：
-
-| 項目 / 軟體 | 英文指南 (English) | 中文指南 (繁體中文) | 官方下載 |
-| :--- | :--- | :--- | :--- |
-| **Shadowrocket** | [English Setting](https://github.com/renvder/Proxy_Tools/blob/main/Shadowrocket/security-setting.md) | [繁體中文設定](https://github.com/renvder/Proxy_Tools/blob/main/Shadowrocket/security-setting_tw.md) | — |
-| **Brave Browser** | [English Setting](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/Brave_Browser.md) | [繁體中文設定](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/Brave_Browser_tw.md) | [Official Download](https://brave.com/download/) |
-| **LibreWolf Browser** | [English Setting](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/LibreWolf_Browser.md) | [繁體中文設定](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/LibreWolf_Browser_tw.md) | [Official Download](https://librewolf.net/installation/) |
++ **Shadowrocket:** [`Config.ini`](https://raw.githubusercontent.com/renvder/Proxy_Tools/refs/heads/main/Shadowrocket/Config.ini) *(Copy URL directly into the app to import)*
++ **Clash Verge:** [`Global_Extend_Script.js`](https://github.com/renvder/Proxy_Tools/blob/main/Clash_Verge/Global_Extend_Script.js) *(Global Extension Script)*
 
 ---
 
-## **⚠️ 免責聲明**
+## **🕵️ Anti-Tracking & Privacy**
 
-本項目所提供之設定檔與指南僅供網路技術研究、學習與個人隱私保護交流使用。  
-請遵守您所在地之法律法規及相關平台規範。
+Hardening guides for applications and web browsers to block telemetry and enhance online privacy:
+
+| Item / Software | EN Guide | Download |
+| :--- | :--- | :--- |
+| **Shadowrocket** | [Setting](https://github.com/renvder/Proxy_Tools/blob/main/Shadowrocket/security-setting.md) | — |
+| **Brave Browser** | [Setting](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/Brave_Browser.md) | [Official Download](https://brave.com/download/) |
+| **LibreWolf Browser** | [Setting](https://github.com/renvder/Proxy_Tools/blob/main/Browser_Anti-Tracking/LibreWolf_Browser.md) | [Official Download](https://librewolf.net/installation/) |
+
+---
+
+## **⚠️ Disclaimer**
+
+This project and its provided configurations/guides are intended strictly for networking research, education, and personal privacy enhancement.  
+Please comply with your local laws, regulations, and platform terms of service.
