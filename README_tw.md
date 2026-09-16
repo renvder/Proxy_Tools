@@ -17,7 +17,7 @@
 | **v2rayN** | Windows | [GitHub Release](https://github.com/2dust/v2rayN) |
 | **v2rayNG** | Android | [GitHub Release](https://github.com/2dust/v2rayNG) |
 | **Clash Verge** | Windows / macOS / Linux | [GitHub Release](https://github.com/clash-verge-rev/clash-verge-rev) |
-| **Shadowrocket** | iOS / macOS | [App Store](https://apps.apple.com/app/shadowrocket) |
+| **Shadowrocket** | iOS / macOS | [App Store](https://apps.apple.com/us/app/shadowrocket) |
 
 ---
 
