@@ -1,6 +1,6 @@
 <p align="right">
   🌐 <b>Language / 語言:</b>
-  <a href="./README_EN.md"><b>EN</b></a> | 
+  <a href="./README.md"><b>EN</b></a> | 
   <a href="./README.md"><b>漢</b></a>
 </p>
 
