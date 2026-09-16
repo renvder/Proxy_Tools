@@ -1,7 +1,7 @@
 <p align="right">
   🌐 <b></b>
   <a href="./README.md"><b>EN</b></a> | 
-  <a href="./README_tw.md"><b>漢</b></a>
+  <b>漢</b></a>
 </p>
 
 # **Proxy Tools**
