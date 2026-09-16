@@ -274,16 +274,9 @@ function main(config) {
   if (proxyCount === 0 && proxyProviderCount === 0) {
     throw new Error("設定檔中未找到任何代理");
   }
-
-  // 頂層關閉 IPv6，避免走系統原生 IPv6 通道造成洩漏（與 dns.ipv6:false 雙重保險）
   config["ipv6"] = false;
-
-  // 啟用 TUN 並開啟 strict-route + dns-hijack，確保所有流量（含繞過規則的軟體）
-  // 都被導入 TUN 介面，DNS 查詢也被劫持進 Fake-IP，避免透明代理洩漏
   config["tun"] = tunConfig;
-
   config["dns"] = dnsConfig;
-
   config["proxy-groups"] = [
     {
       ...groupBaseOption,
