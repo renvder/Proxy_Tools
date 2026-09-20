@@ -1,24 +1,22 @@
 const domesticNameservers = [
-  "https://dns.alidns.com/dns-query",
-  "https://doh.pub/dns-query"
+  "https://dns.alidns.com/dns-query#disable-qtype-65=true",
+  "https://doh.pub/dns-query#disable-qtype-65=true"
 ];
 
 const foreignNameservers = [
-  "https://doh.opendns.com/dns-query#節點選擇",
-  "https://cloudflare-dns.com/dns-query#節點選擇",
-  "https://dns.google/dns-query#節點選擇"
+  "https://8.8.8.8/dns-query#節點選擇"
 ];
 
 const dnsConfig = {
   "enable": true,
-  "listen": "0.0.0.0:1053",
+  "listen": "127.0.0.1:1053",
   "ipv6": false,
   "prefer-h3": false,
   "respect-rules": true,
   "use-system-hosts": false,
   "cache-algorithm": "arc",
   "enhanced-mode": "fake-ip",
-  "fake-ip-range": "198.18.0.1/16",
+  "fake-ip-range": "198.18.0.0/16",
   "fake-ip-filter-mode": "blacklist",
   "fake-ip-filter": [
 
@@ -39,12 +37,15 @@ const dnsConfig = {
 
     "localhost.work.weixin.qq.com"
   ],
-  "default-nameserver": ["223.5.5.5","1.2.4.8"],
+  "default-nameserver": [
+    "https://223.5.5.5/dns-query",
+    "https://223.6.6.6/dns-query"
+  ],
   "nameserver": [...foreignNameservers],
-  "proxy-server-nameserver":[...domesticNameservers],
-  "direct-nameserver":[...domesticNameservers],
+  "proxy-server-nameserver": [...domesticNameservers],
+  "direct-nameserver": [...domesticNameservers],
   "nameserver-policy": {
-  "geosite:private,cn": domesticNameservers
+    "geosite:private,cn": domesticNameservers
   }
 };
 
@@ -57,6 +58,21 @@ const tunConfig = {
   "dns-hijack": [
     "any:53",
     "tcp://any:53"
+  ]
+};
+
+const snifferConfig = {
+  "enable": true,
+  "force-dns-mapping": false,
+  "parse-pure-ip": true,
+  "override-destination": false,
+  "sniff": {
+    "HTTP": { "ports": [80, "8080-8880"] },
+    "TLS": { "ports": [443, 8443] },
+    "QUIC": { "ports": [443, 8443] }
+  },
+  "skip-domain": [
+    "+.push.apple.com"
   ]
 };
 
@@ -277,6 +293,7 @@ function main(config) {
   config["ipv6"] = false;
   config["tun"] = tunConfig;
   config["dns"] = dnsConfig;
+  config["sniffer"] = snifferConfig;
   config["proxy-groups"] = [
     {
       ...groupBaseOption,
@@ -423,12 +440,12 @@ function main(config) {
   config["rule-providers"] = ruleProviders;
   config["rules"] = rules;
 
-  if(config["proxies"]) {
+  if (config["proxies"]) {
     config["proxies"].forEach(proxy => {
-
-      proxy.udp = true
-
-    })
+      if (proxy.udp === undefined) {
+        proxy.udp = true;
+      }
+    });
   }
 
   return config;
