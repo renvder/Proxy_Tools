@@ -51,14 +51,9 @@ const dnsConfig = {
 
 const tunConfig = {
   "enable": true,
-  "stack": "mixed",
   "auto-route": true,
   "auto-detect-interface": true,
   "strict-route": true,
-  "dns-hijack": [
-    "any:53",
-    "tcp://any:53"
-  ]
 };
 
 const snifferConfig = {
