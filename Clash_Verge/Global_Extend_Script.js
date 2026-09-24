@@ -4,8 +4,8 @@ const domesticNameservers = [
 ];
 
 const foreignNameservers = [
-  "https://8.8.8.8/dns-query#節點選擇",
-  "https://1.1.1.1/dns-query#節點選擇"
+  "https://1.1.1.1/dns-query#節點選擇",
+  "https://8.8.8.8/dns-query#節點選擇"
 ];
 
 const dnsConfig = {
