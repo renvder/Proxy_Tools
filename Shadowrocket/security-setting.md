@@ -1,3 +1,8 @@
+<p align="right">
+  🌐 <b>EN</b> |
+  <a href="./security-setting_tw.md"><b>漢</b></a>
+</p>
+
 # Shadowrocket Privacy and Network Compatibility Guide
 
 This guide explains how to enable STUN protection, improve compatibility for certain apps, and use TUN mode to handle device traffic in Shadowrocket.
