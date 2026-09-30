@@ -1,3 +1,8 @@
+<p align="right">
+  🌐 <a href="./LibreWolf_Browser.md"><b>EN</b></a> |
+  <b>漢</b>
+</p>
+
 # LibreWolf 瀏覽器 WebRTC、QUIC 與位置隱私防護設定
 
 本指南說明如何透過 `about:config` 控制 LibreWolf 的 WebRTC 與 QUIC 行為，降低真實 IP 位址與區域網路 IP 位址洩漏的風險，並徹底封鎖網站位置權限。
