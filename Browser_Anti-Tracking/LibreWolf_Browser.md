@@ -1,3 +1,8 @@
+<p align="right">
+  🌐 <b>EN</b> |
+  <a href="./LibreWolf_Browser_tw.md"><b>漢</b></a>
+</p>
+
 # LibreWolf WebRTC, QUIC, and Location Privacy Protection Settings
 
 This guide explains how to use `about:config` to control WebRTC and QUIC behavior in LibreWolf, reduce the risk of public and local IP address leaks, and completely block website location permissions.
