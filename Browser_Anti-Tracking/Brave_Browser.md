@@ -1,3 +1,8 @@
+<p align="right">
+  🌐 <b>EN</b> |
+  <a href="./Brave_Browser_tw.md"><b>漢</b></a>
+</p>
+
 # Brave Browser Fingerprint, WebRTC, QUIC, and DNS Privacy Protection Guide
 
 This guide explains how to strengthen fingerprinting resistance, disable the QUIC protocol and Secure DNS to prevent traffic and DNS leaks, reduce WebRTC IP leak risks, and completely block website location permissions in Brave Browser.
