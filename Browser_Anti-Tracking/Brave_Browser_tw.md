@@ -1,3 +1,8 @@
+<p align="right">
+  🌐 <a href="./Brave_Browser.md"><b>EN</b></a> |
+  <b>漢</b>
+</p>
+
 # Brave 瀏覽器指紋、WebRTC、QUIC 與 DNS 隱私防護整合指南
 
 本指南說明如何在 Brave 瀏覽器中強化防指紋追蹤、停用 QUIC 協定与安全 DNS 以防止流量及 DNS 洩漏、降低 WebRTC 真實 IP 洩漏風險，並徹底封鎖網站取得位置權限。
