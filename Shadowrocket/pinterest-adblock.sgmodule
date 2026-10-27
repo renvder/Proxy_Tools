@@ -1,0 +1,25 @@
+#!name=Pinterest - Adblock
+#!desc=过滤信息流/搜索/相关推荐里的 Promoted Pins，并屏蔽广告与追踪域名。需开启 MITM 并在 iOS 设置里信任 Shadowrocket 证书，否则 HTTPS 改写不生效。
+#!author=Muse
+#!homepage=https://www.pinterest.com
+
+[MITM]
+hostname = api.pinterest.com, www.pinterest.com, pinterest.com
+
+[Script]
+Pinterest去广告 = type=http-response,pattern=^https?://api\.pinterest\.com/v3/.*$,requires-body=1,max-size=10485760,script-path=https://muse.ai/files/1279021101961251/1314632621743210/c3n7aajvdmswurgb06y1ttx7/pinterest-adblock.js,script-update-interval=0,timeout=10
+
+[Rewrite]
+# 广告与追踪域名直接拒绝，不走 MITM 改写
+^https?://ads\.pinterest\.com - reject
+^https?://ad\.pinterest\.com - reject
+^https?://ct\.pinterest\.com - reject
+^https?://log\.pinterest\.com - reject
+^https?://trk\.pinterest\.com - reject
+
+[Rule]
+# 同上，规则层兜底（不影响图片 CDN i.pinimg.com / s.pinimg.com，不要屏蔽它们）
+DOMAIN-SUFFIX,ads.pinterest.com,REJECT
+DOMAIN-SUFFIX,ct.pinterest.com,REJECT
+DOMAIN-SUFFIX,log.pinterest.com,REJECT
+DOMAIN-SUFFIX,trk.pinterest.com,REJECT
