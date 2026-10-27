@@ -1,5 +1,5 @@
 #!name=Splash - AdBlock
-#!desc=只針對開屏廣告，重點是豆瓣，另含優酷、愛奇藝、嗶哩嗶哩、咪咕視頻，騰訊視頻目前沒有已證實的專用開屏規則。需開啟 MITM 並在 iOS 設置裏信任 Shadowrocket 證書，否則 HTTPS 改寫不生效。僅攔截開屏，不去除片前廣告、不解鎖會員內容。
+#!desc=開屏廣告過濾：豆瓣、優酷、愛奇藝、嗶哩嗶哩、咪咕視頻。另含通用 GDT 攔截，但未確認能攔截騰訊視頻開屏。需啟用 HTTPS 解密，並在 iOS 設定中安裝及信任 Shadowrocket 憑證。僅針對開屏，不處理片前廣告，不解鎖會員內容。
 #!author=Muse
 
 [MITM]
@@ -9,21 +9,24 @@ hostname = api.douban.com, iyes.youku.com, iface.iqiyi.com, t7z.cupid.iqiyi.com,
 開屏去廣告 = type=http-response,pattern=^https?://(app\.bilibili\.com/x/v2/splash/list|(t7z|kjp)\.cupid\.iqiyi\.com/mixer\?),requires-body=1,max-size=10485760,script-path=https://raw.githubusercontent.com/renvder/Proxy_Tools/refs/heads/main/Shadowrocket/splash-adblock.js,script-update-interval=0,timeout=10
 
 [Rewrite]
-# 騰訊視頻：目前沒有已證實的專用開屏接口，下面只是通用 GDT 攔截，不是騰訊視頻專用規則
-# mi.gdt.qq.com/gdt_mview.fcg 在 blackmatrix7 裏是聯享家的開屏規則，借用到這裏未經證實對騰訊視頻有效
-# 騰訊視頻開屏目前未解決，如需精確規則，須以 Shadowrocket 請求記錄為準
+# 通用 GDT 介面攔截。
+# 此規則不是已驗證的騰訊視頻專用開屏規則。
 ^https?://mi\.gdt\.qq\.com/gdt_mview\.fcg - reject
-# 豆瓣（重點）：開屏接口直接拒絕
+
+# 豆瓣：沿用原有開屏介面規則。
 ^https?://api\.douban\.com/v2/app_ads/splash - reject
-# 優酷：啓動接口返回空，iPhone 版和 iPad HD 版共用同一接口
+
+# 優酷：沿用原有啟動介面規則。
 ^https?://iyes\.youku\.com/uts/v\d/start - reject-200
-# 愛奇藝：廣告信息接口直接拒絕，開屏混排走上面腳本清理
+
+# 愛奇藝：廣告資訊介面；mixer 回應由上方腳本處理。
 ^https?://iface\.iqiyi\.com/api/getNewAdInfo - reject
-# 咪咕視頻：開屏圖片接口返回空，iPhone 版和 iPad HD 版共用同一類接口
+
+# 咪咕視頻：沿用原有開屏圖片介面規則。
 ^https?://app\.c\.nf\.migu\.cn/.*column/start(-)?up-pic - reject-200
 ^https?://aikanvod\.miguvideo\.com/video/p/i_adverseInterface\.jsp - reject-200
 
 [Rule]
-# 通用 GDT 攔截：擋整個騰訊廣告平台 GDT 域名，對騰訊視頻開屏未經證實有效，僅作通用攔截
+# 通用 GDT 網域攔截，未確認能攔截騰訊視頻開屏。
+# 此後綴規則已涵蓋 mi.gdt.qq.com，不再重複添加。
 DOMAIN-SUFFIX,gdt.qq.com,REJECT
-DOMAIN,mi.gdt.qq.com,REJECT
