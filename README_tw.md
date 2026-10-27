@@ -24,7 +24,7 @@
 
 針對支援的代理客戶端提供優化的 DNS 洩漏防護設定檔與擴充腳本：
 
-+ **Shadowrocket：** [`Config.ini`](https://raw.githubusercontent.com/renvder/Proxy_Tools/refs/heads/main/Shadowrocket/Config.ini) *(可直接複製網址至 App 中匯入)*
++ **Shadowrocket：** [`No-DNS-Leak.ini`](https://raw.githubusercontent.com/renvder/Proxy_Tools/refs/heads/main/Shadowrocket/No-DNS-Leak.ini) *(可直接複製網址至 App 中匯入)*
 + **Clash Verge：** [`Global_Extend_Script.js`](https://github.com/renvder/Proxy_Tools/blob/main/Clash_Verge/Global_Extend_Script.js) *(全局覆寫擴充腳本)*
 
 ---
