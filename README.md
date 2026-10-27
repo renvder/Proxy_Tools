@@ -24,7 +24,7 @@
 
 Optimized DNS leak prevention configurations and extended scripts for supported proxy clients:
 
-+ **Shadowrocket:** [`Config.ini`](https://raw.githubusercontent.com/renvder/Proxy_Tools/refs/heads/main/Shadowrocket/Config.ini) *(Copy URL directly into the app to import)*
++ **Shadowrocket:** [`No-DNS-Leak.ini`](https://raw.githubusercontent.com/renvder/Proxy_Tools/refs/heads/main/Shadowrocket/No-DNS-Leak.ini) *(Copy URL directly into the app to import)*
 + **Clash Verge:** [`Global_Extend_Script.js`](https://github.com/renvder/Proxy_Tools/blob/main/Clash_Verge/Global_Extend_Script.js) *(Global Extension Script)*
 
 ---
