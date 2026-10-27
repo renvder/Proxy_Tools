@@ -1,0 +1,25 @@
+#!name=Pinterest - Adblock
+#!desc=過濾信息流／搜索／相關推薦裏的 Promoted Pins，並屏蔽廣告與追蹤域名。需開啟 MITM 並在 iOS 設置裏信任 Shadowrocket 證書，否則 HTTPS 改寫不生效。
+#!author=Muse
+#!homepage=https://www.pinterest.com
+
+[MITM]
+hostname = api.pinterest.com, www.pinterest.com, pinterest.com
+
+[Script]
+Pinterest去廣告 = type=http-response,pattern=^https?://api\.pinterest\.com/v3/.*$,requires-body=1,max-size=10485760,script-path=https://raw.githubusercontent.com/renvder/Proxy_Tools/refs/heads/main/Shadowrocket/pinterest-adblock.js,script-update-interval=0,timeout=10
+
+[Rewrite]
+# 廣告與追蹤域名直接拒絕，不走 MITM 改寫
+^https?://ads\.pinterest\.com - reject
+^https?://ad\.pinterest\.com - reject
+^https?://ct\.pinterest\.com - reject
+^https?://log\.pinterest\.com - reject
+^https?://trk\.pinterest\.com - reject
+
+[Rule]
+# 同上，規則層兜底（不影響圖片 CDN i.pinimg.com / s.pinimg.com，不要屏蔽它們）
+DOMAIN-SUFFIX,ads.pinterest.com,REJECT
+DOMAIN-SUFFIX,ct.pinterest.com,REJECT
+DOMAIN-SUFFIX,log.pinterest.com,REJECT
+DOMAIN-SUFFIX,trk.pinterest.com,REJECT
