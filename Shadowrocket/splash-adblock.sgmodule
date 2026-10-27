@@ -1,32 +1,43 @@
 #!name=Splash - AdBlock
-#!desc=開屏廣告過濾：豆瓣、優酷、愛奇藝、嗶哩嗶哩、咪咕視頻。另含通用 GDT 攔截，但未確認能攔截騰訊視頻開屏。需啟用 HTTPS 解密，並在 iOS 設定中安裝及信任 Shadowrocket 憑證。僅針對開屏，不處理片前廣告，不解鎖會員內容。
+#!desc=開屏廣告過濾：豆瓣、優酷、愛奇藝、嗶哩嗶哩、咪咕視頻、騰訊視頻（騰訊為社區規則，待實測）。需啟用 HTTPS 解密並信任 Shadowrocket 憑證。僅針對開屏，不處理片前廣告，不解鎖會員內容。
 #!author=Muse
 
 [MITM]
-hostname = api.douban.com, iyes.youku.com, iface.iqiyi.com, t7z.cupid.iqiyi.com, kjp.cupid.iqiyi.com, app.bilibili.com, app.c.nf.migu.cn, aikanvod.miguvideo.com, mi.gdt.qq.com
+hostname = api.douban.com, iyes.youku.com, iface.iqiyi.com, t7z.cupid.iqiyi.com, kjp.cupid.iqiyi.com, app.bilibili.com, app.c.nf.migu.cn, aikanvod.miguvideo.com
 
 [Script]
-開屏去廣告 = type=http-response,pattern=^https?://(app\.bilibili\.com/x/v2/splash/list|(t7z|kjp)\.cupid\.iqiyi\.com/mixer\?),requires-body=1,max-size=10485760,script-path=https://raw.githubusercontent.com/renvder/Proxy_Tools/refs/heads/main/Shadowrocket/splash-adblock.js,script-update-interval=0,timeout=10
+# 嗶哩嗶哩 splash/list、愛奇藝 mixer 由腳本處理回應；腳本會輸出日誌，可在 Shadowrocket 日誌中搜索 Splash-AdBlock。
+# script-path 末尾的 ?v=2 用來繞過緩存，之後改腳本請遞增。
+開屏去廣告 = type=http-response,pattern=^https?://(app\.bilibili\.com/x/v2/splash/list|(t7z|kjp)\.cupid\.iqiyi\.com/mixer(\?|$)),requires-body=1,max-size=10485760,script-path=https://raw.githubusercontent.com/renvder/Proxy_Tools/refs/heads/main/Shadowrocket/splash-adblock.js?v=2,script-update-interval=0,timeout=10
 
 [Rewrite]
-# 通用 GDT 介面攔截。
-# 此規則不是已驗證的騰訊視頻專用開屏規則。
-^https?://mi\.gdt\.qq\.com/gdt_mview\.fcg - reject
-
-# 豆瓣：沿用原有開屏介面規則。
+# 豆瓣：已驗證有效，保持不動。
 ^https?://api\.douban\.com/v2/app_ads/splash - reject
+# 豆瓣：社區規則中的另一個廣告接口（未驗證，無效可刪）。
+^https?://api\.douban\.com/b.*/common_ads\? - reject-dict
 
-# 優酷：沿用原有啟動介面規則。
+# 優酷：沿用原規則，實測無開屏廣告。
 ^https?://iyes\.youku\.com/uts/v\d/start - reject-200
 
-# 愛奇藝：廣告資訊介面；mixer 回應由上方腳本處理。
+# 愛奇藝：getNewAdInfo 沿用；/show 為社區規則（Moli）中的開屏接口；/mixer 由上方腳本處理。
 ^https?://iface\.iqiyi\.com/api/getNewAdInfo - reject
+^https?://(t7z|kjp)\.cupid\.iqiyi\.com/show - reject
 
-# 咪咕視頻：沿用原有開屏圖片介面規則。
+# 嗶哩嗶哩：splash/show 為社區規則（Moli）；splash/list 由上方腳本處理。
+^https?://app\.bilibili\.com/x/v2/splash/show - reject-dict
+
+# 咪咕視頻：沿用原規則，待抓包確認。
 ^https?://app\.c\.nf\.migu\.cn/.*column/start(-)?up-pic - reject-200
 ^https?://aikanvod\.miguvideo\.com/video/p/i_adverseInterface\.jsp - reject-200
 
 [Rule]
-# 通用 GDT 網域攔截，未確認能攔截騰訊視頻開屏。
-# 此後綴規則已涵蓋 mi.gdt.qq.com，不再重複添加。
+# 騰訊視頻：社區 hosts 規則把 livew.l.qq.com 標為騰訊視頻廣告域名。無需 MITM。
+# 未經實機驗證；若影響正常播放，刪除這一行即可。
+DOMAIN,livew.l.qq.com,REJECT
+
+# 通用 GDT 域名攔截（第三方 App 的廣告 SDK），不針對騰訊視頻。
 DOMAIN-SUFFIX,gdt.qq.com,REJECT
+
+# 愛奇藝更激進的選項（默認不啟用）：整個域名攔截，社區 hosts 常見，
+# 但可能連片前廣告接口一起攔，導致播放前等待超時。
+# DOMAIN,t7z.cupid.iqiyi.com,REJECT
