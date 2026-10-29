@@ -1,4 +1,4 @@
-#!name=Splash - AdBlock
+#!name=Splash - ADBlock
 #!desc=開屏廣告過濾：豆瓣、優酷、愛奇藝、嗶哩嗶哩、咪咕視頻、騰訊視頻（騰訊為社區規則，待實測）。需啟用 HTTPS 解密並信任 Shadowrocket 憑證。僅針對開屏，不處理片前廣告，不解鎖會員內容。
 #!author=Muse
 
