@@ -1,4 +1,4 @@
-#!name=Pinterest - Adblock
+#!name=Pinterest - ADblock
 #!desc=過濾信息流／搜索／相關推薦裏的 Promoted Pins，並屏蔽廣告與追蹤域名。需開啟 MITM 並在 iOS 設置裏信任 Shadowrocket 證書，否則 HTTPS 改寫不生效。
 #!author=Muse
 #!homepage=https://www.pinterest.com
