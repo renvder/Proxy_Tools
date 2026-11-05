@@ -8,9 +8,12 @@ hostname = api.douban.com, iyes.youku.com, iface.iqiyi.com, t7z.cupid.iqiyi.com,
 [Script]
 # 嗶哩嗶哩 splash/list、愛奇藝 mixer 由腳本處理回應；腳本會輸出日誌，可在 Shadowrocket 日誌中搜索 Splash-AdBlock。
 # script-path 末尾的 ?v=2 用來繞過緩存，之後改腳本請遞增。
-開屏去廣告 = type=http-response,pattern=^https?://(app\.bilibili\.com/x/v2/splash/list|(t7z|kjp)\.cupid\.iqiyi\.com/mixer(\?|$)),requires-body=1,max-size=10485760,script-path=https://raw.githubusercontent.com/renvder/Proxy_Tools/refs/heads/main/Shadowrocket/splash-adblock.js,script-update-interval=0,timeout=10
+開屏去廣告 = type=http-response,pattern=^https?://(app\.bilibili\.com/x/v2/splash/list|(t7z|kjp)\.cupid\.iqiyi\.com/mixer(\?|$)),requires-body=1,max-size=10485760,script-path=https://raw.githubusercontent.com/renvder/Proxy_Tools/refs/heads/main/Shadowrocket/splash-adblock.js?v=2,script-update-interval=0,timeout=10
 
 [Rewrite]
+# 豆瓣：2026-11-05 新增，針對新版預載/展示分流，尚未在你機器上實測。
+^https?://api\.douban\.com/v\d+/app_ads/splash_preload - reject-dict
+^https?://api\.douban\.com/v\d+/app_ads/splash_show - reject
 # 豆瓣：已驗證有效，保持不動。
 ^https?://api\.douban\.com/v2/app_ads/splash - reject
 # 豆瓣：社區規則中的另一個廣告接口（未驗證，無效可刪）。
