@@ -1,10 +1,10 @@
-// Pinterest 去广告 v2 - Shadowrocket http-response 脚本
-// 针对 App 更新后失效的情况加宽了判断：原版只认 is_promoted 等旧标记，
-// 新版可能换了标记名。v2 增加：任何键名含 promoted / sponsor / advert
-// 且值非空的对象都视为广告；同时检查嵌套的 pin / data 对象。
-// 策略不变：只删广告项，解析失败原样返回，绝不让 App 断流。
-// 注意：这是加宽启发式，不是已验证的新版接口字段；若 v2 仍无效，
-// 说明问题不在标记名，而在拦截本身（新接口地址或证书固定），需抓请求日志定位。
+// Pinterest AdBlock v2 - Shadowrocket http-response script
+// Widened checks for the case where the app update broke it: the original only recognised old markers like is_promoted,
+// and the new version may have renamed the markers. v2 adds: any object with a key containing promoted / sponsor / advert
+// and a non-empty value is treated as an ad; it also checks nested pin / data objects.
+// Strategy unchanged: only delete ad items, pass through unchanged on parse failure, never break the app.
+// Note: this is a widened heuristic, not a verified new-version API field; if v2 still does not work,
+// the problem is not the marker name, but interception itself (new endpoint or certificate pinning); capture the request log to locate it.
 
 function hasAdKey(obj) {
   for (var k in obj) {
@@ -32,10 +32,10 @@ function isAdItem(item) {
   if (item.advertiser || item.promotion || item.promoted_by || item.sponsored_by) return true;
   if (item.promotion_id || item.ad_id || item.ad_account_id || item.campaign_id) return true;
   if (typeof item.type === 'string' && /^(ad|ads|promoted|sponsored|shopping_ad|product_ad|ad_pin)$/i.test(item.type)) return true;
-  // 嵌套对象：推广标记可能藏在 pin / data 里
+  // Nested objects: promotion markers may hide inside pin / data
   if (item.pin && isAdItem(item.pin)) return true;
   if (item.data && isAdItem(item.data)) return true;
-  // 通用键名兜底：新标记名只要含 promoted / sponsor / advert 就算
+  // Generic key fallback: any new marker name containing promoted / sponsor / advert counts
   if (hasAdKey(item)) return true;
   try {
     var s = JSON.stringify(item);
@@ -59,7 +59,7 @@ function clean(node) {
   if (node && typeof node === 'object') {
     for (var k in node) {
       if (!Object.prototype.hasOwnProperty.call(node, k)) continue;
-      // 明确的广告容器直接删除（v2 增加 sponsored / shopping_ads 等）
+      // Delete explicit ad containers directly (v2 adds sponsored / shopping_ads, etc.)
       if (k === 'ads' || k === 'promoted_pins' || k === 'sponsored_pins' || k === 'ad_slots' || k === 'promoted' || k === 'sponsored' || k === 'shopping_ads' || k === 'ad_items' || k === 'promoted_items') {
         delete node[k];
         continue;
@@ -80,6 +80,6 @@ try {
     $done({});
   }
 } catch (e) {
-  // 解析失败或结构变化时原样放行，避免 Pinterest 白屏／加载失败
+  // On parse failure or structure change, pass through unchanged to avoid a Pinterest blank screen / load failure
   $done({});
 }
