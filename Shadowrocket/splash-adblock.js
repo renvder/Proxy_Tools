@@ -1,15 +1,15 @@
 /*
- * 開屏去廣告
+ * Splash Ad Blocker
  *
- * 本腳本只處理：
- * 1. 嗶哩嗶哩：/x/v2/splash/list
- * 2. 愛奇藝：指定 cupid 網域的 /mixer 回應
+ * This script only handles:
+ * 1. Bilibili: /x/v2/splash/list
+ * 2. iQiyi: /mixer responses on the specified cupid domains
  *
- * 其餘 App 由模組中的 Rewrite / Rule 處理。
+ * Other apps are handled by Rewrite / Rule in the module.
  *
- * JSON 解析失敗或處理出錯時，保留原始回應，並在日誌中輸出原因。
- * 日誌關鍵字：Splash-AdBlock
- * 不處理片前廣告，不偽造會員狀態，不解鎖付費內容。
+ * On JSON parse failure or any processing error, keep the original response and log the reason.
+ * Log keyword: Splash-AdBlock
+ * Does not handle pre-roll ads, does not fake membership status, does not unlock paid content.
  */
 
 (function () {
@@ -19,8 +19,8 @@
     var changed = false;
 
     /*
-     * 只匹配明確的廣告欄位名稱，不使用寬泛的包含匹配，
-     * 避免清空可能含有正常設定的整個物件。
+     * Only match explicit ad field names, not broad substring matching,
+     * to avoid clearing a whole object that may contain normal settings.
      */
     var adKeys = {
         splash_ad: true,
@@ -77,8 +77,8 @@
     }
 
     /*
-     * 嗶哩嗶哩：list 與 show 可能是數組，也可能是布爾值。
-     * 數組清空，布爾 true 改為 false，保持原有類型，避免客戶端解析失敗。
+     * Bilibili: list and show may be an array or a boolean.
+     * Empty arrays, change true to false, keep the original type to avoid client parse failure.
      */
     function cleanBilibili(obj) {
         var data = obj.data;
@@ -118,10 +118,10 @@
             /^https?:\/\/(?:t7z|kjp)\.cupid\.iqiyi\.com\/mixer(?:\?|$)/i.test(url);
 
         if (!isBilibili && !isIqiyi) {
-            log("未匹配的 URL，放行：" + url.slice(0, 80));
+            log("Unmatched URL, passing through: " + url.slice(0, 80));
         } else if (typeof body !== "string" || body.length === 0) {
-            // 二進制或空回應：Shadowrocket 不會以字串提供，此處無法處理
-            log((isBilibili ? "bilibili" : "iqiyi") + " 回應不是文本或為空，放行（body 類型：" + typeof body + "）");
+            // Binary or empty response: Shadowrocket does not provide it as a string, so it cannot be handled here
+            log((isBilibili ? "bilibili" : "iqiyi") + " response is not text or is empty, passing through (body type: " + typeof body + ")");
         } else {
             var obj = JSON.parse(body);
 
@@ -134,18 +134,18 @@
 
                 if (changed) {
                     result = { body: JSON.stringify(obj) };
-                    log((isBilibili ? "bilibili" : "iqiyi") + " 已清除廣告欄位");
+                    log((isBilibili ? "bilibili" : "iqiyi") + " ad fields cleared");
                 } else {
                     log(
                         (isBilibili ? "bilibili" : "iqiyi") +
-                            " 解析成功但沒有可清除的欄位，頂層鍵：" +
+                            " parsed successfully but no removable fields, top-level keys: " +
                             Object.keys(obj).slice(0, 12).join(",")
                     );
                 }
             }
         }
     } catch (e) {
-        log("處理失敗，放行原始回應：" + (e && e.message ? e.message : e));
+        log("Processing failed, passing through original response: " + (e && e.message ? e.message : e));
         result = {};
     }
 
