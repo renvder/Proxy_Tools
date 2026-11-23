@@ -20,27 +20,22 @@ const dnsConfig = {
   "fake-ip-range": "198.18.0.0/16",
   "fake-ip-filter-mode": "blacklist",
   "fake-ip-filter": [
-
     "+.lan",
     "+.local",
-
     "+.msftconnecttest.com",
     "+.msftncsi.com",
-
     "localhost.ptlogin2.qq.com",
     "localhost.sec.qq.com",
-
     "+.in-addr.arpa",
     "+.ip6.arpa",
     "time.*.com",
     "time.*.gov",
     "pool.ntp.org",
-
     "localhost.work.weixin.qq.com"
   ],
   "default-nameserver": [
-    "https://223.5.5.5/dns-query",
-    "https://223.6.6.6/dns-query"
+    "223.5.5.5",
+    "223.6.6.6"
   ],
   "nameserver": [...foreignNameservers],
   "proxy-server-nameserver": [...domesticNameservers],
@@ -82,140 +77,133 @@ const ruleProviders = {
   "reject": {
     ...ruleProviderCommon,
     "behavior": "domain",
-    "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/reject.txt",
+    "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/reject.txt",
     "path": "./ruleset/loyalsoldier/reject.yaml"
   },
   "icloud": {
     ...ruleProviderCommon,
     "behavior": "domain",
-    "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/icloud.txt",
+    "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/icloud.txt",
     "path": "./ruleset/loyalsoldier/icloud.yaml"
   },
   "apple": {
     ...ruleProviderCommon,
     "behavior": "domain",
-    "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/apple.txt",
+    "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/apple.txt",
     "path": "./ruleset/loyalsoldier/apple.yaml"
   },
   "google": {
     ...ruleProviderCommon,
     "behavior": "domain",
-    "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/google.txt",
+    "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/google.txt",
     "path": "./ruleset/loyalsoldier/google.yaml"
   },
   "proxy": {
     ...ruleProviderCommon,
     "behavior": "domain",
-    "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/proxy.txt",
+    "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/proxy.txt",
     "path": "./ruleset/loyalsoldier/proxy.yaml"
   },
   "direct": {
     ...ruleProviderCommon,
     "behavior": "domain",
-    "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/direct.txt",
+    "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/direct.txt",
     "path": "./ruleset/loyalsoldier/direct.yaml"
   },
   "private": {
     ...ruleProviderCommon,
     "behavior": "domain",
-    "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/private.txt",
+    "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/private.txt",
     "path": "./ruleset/loyalsoldier/private.yaml"
   },
   "gfw": {
     ...ruleProviderCommon,
     "behavior": "domain",
-    "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/gfw.txt",
+    "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/gfw.txt",
     "path": "./ruleset/loyalsoldier/gfw.yaml"
   },
   "tld-not-cn": {
     ...ruleProviderCommon,
     "behavior": "domain",
-    "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/tld-not-cn.txt",
+    "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/tld-not-cn.txt",
     "path": "./ruleset/loyalsoldier/tld-not-cn.yaml"
   },
   "telegramcidr": {
     ...ruleProviderCommon,
     "behavior": "ipcidr",
-    "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/telegramcidr.txt",
+    "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/telegramcidr.txt",
     "path": "./ruleset/loyalsoldier/telegramcidr.yaml"
   },
   "cncidr": {
     ...ruleProviderCommon,
     "behavior": "ipcidr",
-    "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/cncidr.txt",
+    "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/cncidr.txt",
     "path": "./ruleset/loyalsoldier/cncidr.yaml"
   },
   "lancidr": {
     ...ruleProviderCommon,
     "behavior": "ipcidr",
-    "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/lancidr.txt",
+    "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/lancidr.txt",
     "path": "./ruleset/loyalsoldier/lancidr.yaml"
   },
   "applications": {
     ...ruleProviderCommon,
     "behavior": "classical",
-    "url": "https://fastly.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/applications.txt",
+    "url": "https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/applications.txt",
     "path": "./ruleset/loyalsoldier/applications.yaml"
-  },
-  "bahamut": {
-    ...ruleProviderCommon,
-    "behavior": "classical",
-    "url": "https://fastly.jsdelivr.net/gh/xiaolin-007/clash@main/rule/Bahamut.txt",
-    "path": "./ruleset/xiaolin-007/bahamut.yaml"
   },
   "YouTube": {
     ...ruleProviderCommon,
     "behavior": "classical",
-    "url": "https://fastly.jsdelivr.net/gh/xiaolin-007/clash@main/rule/YouTube.txt",
+    "url": "https://raw.githubusercontent.com/xiaolin-007/clash/main/rule/YouTube.txt",
     "path": "./ruleset/xiaolin-007/YouTube.yaml"
   },
   "Netflix": {
     ...ruleProviderCommon,
     "behavior": "classical",
-    "url": "https://fastly.jsdelivr.net/gh/xiaolin-007/clash@main/rule/Netflix.txt",
+    "url": "https://raw.githubusercontent.com/xiaolin-007/clash/main/rule/Netflix.txt",
     "path": "./ruleset/xiaolin-007/Netflix.yaml"
   },
   "Spotify": {
     ...ruleProviderCommon,
     "behavior": "classical",
-    "url": "https://fastly.jsdelivr.net/gh/xiaolin-007/clash@main/rule/Spotify.txt",
+    "url": "https://raw.githubusercontent.com/xiaolin-007/clash/main/rule/Spotify.txt",
     "path": "./ruleset/xiaolin-007/Spotify.yaml"
   },
   "BilibiliHMT": {
     ...ruleProviderCommon,
     "behavior": "classical",
-    "url": "https://fastly.jsdelivr.net/gh/xiaolin-007/clash@main/rule/BilibiliHMT.txt",
+    "url": "https://raw.githubusercontent.com/xiaolin-007/clash/main/rule/BilibiliHMT.txt",
     "path": "./ruleset/xiaolin-007/BilibiliHMT.yaml"
   },
   "AI": {
     ...ruleProviderCommon,
     "behavior": "classical",
-    "url": "https://fastly.jsdelivr.net/gh/xiaolin-007/clash@main/rule/AI.txt",
+    "url": "https://raw.githubusercontent.com/xiaolin-007/clash/main/rule/AI.txt",
     "path": "./ruleset/xiaolin-007/AI.yaml"
   },
   "TikTok": {
     ...ruleProviderCommon,
     "behavior": "classical",
-    "url": "https://fastly.jsdelivr.net/gh/xiaolin-007/clash@main/rule/TikTok.txt",
+    "url": "https://raw.githubusercontent.com/xiaolin-007/clash/main/rule/TikTok.txt",
     "path": "./ruleset/xiaolin-007/TikTok.yaml"
   },
   "Steam": {
     ...ruleProviderCommon,
     "behavior": "classical",
-    "url": "https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Steam/Steam.yaml",
+    "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Steam/Steam.yaml",
     "path": "./ruleset/blackmatrix7/steam.yaml"
   },
   "Blizzard": {
     ...ruleProviderCommon,
     "behavior": "classical",
-    "url": "https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Blizzard/Blizzard.yaml",
+    "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Blizzard/Blizzard.yaml",
     "path": "./ruleset/blackmatrix7/blizzard.yaml"
   },
-
   "microsoft": {
     ...ruleProviderCommon,
     "behavior": "classical",
-    "url": "https://fastly.jsdelivr.net/gh/blackmatrix7/ios_rule_script@master/rule/Clash/Microsoft/Microsoft.yaml",
+    "url": "https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/master/rule/Clash/Microsoft/Microsoft.yaml",
     "path": "./ruleset/blackmatrix7/microsoft.yaml"
   }
 };
@@ -241,7 +229,6 @@ const rules = [
 
   "RULE-SET,Steam,Steam遊戲",
   "RULE-SET,Blizzard,魔獸世界",
-
   "RULE-SET,applications,全局直連",
   "RULE-SET,private,全局直連",
   "RULE-SET,reject,廣告過濾",
@@ -250,7 +237,6 @@ const rules = [
   "RULE-SET,microsoft,微軟服務",
   "RULE-SET,YouTube,YouTube",
   "RULE-SET,Netflix,Netflix",
-  "RULE-SET,bahamut,動畫瘋",
   "RULE-SET,Spotify,Spotify",
   "RULE-SET,BilibiliHMT,嗶哩嗶哩港澳台",
   "RULE-SET,AI,AI",
@@ -264,32 +250,32 @@ const rules = [
   "RULE-SET,cncidr,全局直連,no-resolve",
   "RULE-SET,telegramcidr,電報消息,no-resolve",
 
-  "GEOSITE,CN,全局直連",
   "GEOIP,LAN,全局直連,no-resolve",
-  "GEOIP,CN,全局直連,no-resolve",
   "MATCH,漏網之魚"
 ];
 
 const groupBaseOption = {
-  "interval": 300,
-  "timeout": 3000,
-  "url": "https://www.google.com/generate_204",
-  "lazy": true,
-  "max-failed-times": 3,
   "hidden": false
 };
 
+
 function main(config) {
+
   const proxyCount = config?.proxies?.length ?? 0;
+
   const proxyProviderCount =
-    typeof config?.["proxy-providers"] === "object" ? Object.keys(config["proxy-providers"]).length : 0;
+    config?.["proxy-providers"] ? Object.keys(config["proxy-providers"]).length : 0;
+
   if (proxyCount === 0 && proxyProviderCount === 0) {
     throw new Error("設定檔中未找到任何代理");
   }
+
+  config["mode"] = "rule";
   config["ipv6"] = false;
   config["tun"] = tunConfig;
   config["dns"] = dnsConfig;
   config["sniffer"] = snifferConfig;
+
   config["proxy-groups"] = [
     {
       ...groupBaseOption,
@@ -380,15 +366,6 @@ function main(config) {
       "proxies": ["節點選擇","全局直連"],
       "include-all": true,
       "icon": "https://fastly.jsdelivr.net/gh/clash-verge-rev/clash-verge-rev.github.io@main/docs/assets/icons/apple.svg"
-    },
-    {
-      ...groupBaseOption,
-      "name": "動畫瘋",
-      "type": "select",
-      "proxies": ["節點選擇"],
-      "include-all": true,
-      "filter": "(?i)台|tw|TW",
-      "icon": "https://fastly.jsdelivr.net/gh/xiaolin-007/clash@main/icon/Bahamut.svg"
     },
     {
       ...groupBaseOption,
